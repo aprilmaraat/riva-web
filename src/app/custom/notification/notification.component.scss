@@ -1,0 +1,17 @@
+@import '../../../assets/generic-styles/variable';
+@import '../../../styles.scss';
+
+.notif-area {
+    @extend .center-position;
+    height: 100px;
+    position: absolute;
+    width: 25%;
+    margin-top: 50px;
+    margin-right: 15px;
+    padding-top: 20px;
+    padding-right: 5px;
+    overflow-y: auto;
+    z-index: 8000;
+    // height: 75px;
+    // border: solid 1px red;
+}

@@ -1,0 +1,547 @@
+<div class="form-container">
+
+  <div class="form-row">
+    <div class="row mt-3" style="width:700px;">
+      <div class="col">
+        <span style="color: white;">LAST UPDATE BY : {{lastUpdated.username}} &#47; DATE : {{formatDate(lastUpdated.date)}}</span>
+      </div>
+    </div>
+    
+    <div class="row search-panel">
+      <div class="col-3">
+        <input [(ngModel)]="searchString" class="form-control search-text search-field" type="text" placeholder="SEARCH" [disabled]="editMode" />
+      </div>
+
+      <div class="col-2">
+        <select [(ngModel)]="selectedProductType" (change)="searchPanelChange()" class="custom-select search-field" [disabled]="editMode">
+          <option *ngFor="let productType of productTypes" [value]="productType.value">{{productType.text}}</option>
+        </select>
+      </div>
+      <div class="col-2">
+        <select [(ngModel)]="selectedCustomer" (change)="searchPanelChange()" class="custom-select search-field" [disabled]="editMode">
+          <option [value]="0">All</option>
+          <option *ngFor="let customer of customers" [value]="customer.custIdno">{{customer.customerId}}</option>
+        </select>
+      </div>
+      <div class="col-2">
+        <select [(ngModel)]="selectedJewelryType" (change)="searchPanelChange()" class="custom-select search-field" [disabled]="editMode">
+          <option [value]="0">All</option>
+          <option *ngFor="let jewelryType of jewelryTypes" [value]="jewelryType.jewelryTypeId">{{jewelryType.type}}</option>
+        </select>
+      </div>
+
+      <div class="col-2" style="color: white; line-height: 50px;">
+        Items: {{totalProducts}}
+      </div>
+    </div>
+
+    <div class="table-row row">
+      <div id="productTable" #productTable class="table-container col-md-8" [ngClass]="{'table-collapsed': tableCollapsed}" (clickOutside)="tableActive = false;" (click)="tableActive = true;">
+        <div class="overlay"></div>
+        <table class="table">
+          <thead style="height: 40px !important;">
+            <tr class="col">
+              <th scope="col" (click)="onSort('productsId')"><i class="fa" [ngClass]="sortClass('productsId')"></i>ID</th>
+              <th scope="col" (click)="onSort('sku')"><i class="fa" [ngClass]="sortClass('sku')"></i> SKU</th>
+              <th scope="col" (click)="onSort('customerSku')"><i class="fa" [ngClass]="sortClass('customerSku')"></i> Cust SKU</th>
+              <th scope="col" (click)="onSort('productTypeName')"><i class="fa" [ngClass]="sortClass('productTypeName')"></i> Product Type</th>
+              <th scope="col" (click)="onSort('productName')"><i class="fa" [ngClass]="sortClass('productName')"></i> Name</th>
+              <th scope="col" (click)="onSort('customerCode')"><i class="fa" [ngClass]="sortClass('customerCode')"></i> Cust Code</th>
+              <th scope="col" (click)="onSort('jewelryTypeName')"><i class="fa" [ngClass]="sortClass('jewelryTypeName')"></i> Jewelry Type</th>
+            </tr>
+          </thead>
+          <tbody *ngIf="tableCollapsed === false && !editMode">
+            <tr *ngFor="let item of products | filter:searchString" class="row-data" [ngClass]="{'row-data-active': item.productsId === product.productsId, 'color-band': applyColorBand(item)}" (click)="getProductLocal(item)">
+              <td scope="row">{{ item.productsId }}</td>
+              <td class="sku" scope="row" [innerHTML]="transform(item.sku)"></td>
+              <td scope="row">{{ item.customerSku }}</td>
+              <td scope="row">{{ item.productTypeName }}</td>
+              <td scope="row">{{ item.productName }}</td>
+              <td scope="row">{{ item.customerCodeNavigation.customerId }}</td>
+              <td scope="row">{{ item.jewelryTypeName }}</td>
+            </tr>
+          </tbody>
+          <tbody *ngIf="tableCollapsed === false && editMode">
+            <tr *ngFor="let item of products | filter:searchString" class="row-data" [ngClass]="{'row-data-active': item.productsId === product.productsId}">
+              <td scope="row">{{ item.productsId }}</td>
+              <td class="sku" scope="row" [innerHTML]="transform(item.sku)"></td>
+              <td scope="row">{{ item.customerSku }}</td>
+              <td scope="row">{{ item.productTypeName }}</td>
+              <td scope="row">{{ item.productName }}</td>
+              <td scope="row">{{ item.customerCodeNavigation.customerId }}</td>
+              <td scope="row">{{ item.jewelryTypeName }}</td>
+            </tr>
+          </tbody>
+          <tbody *ngIf="tableCollapsed">
+            <tr class="row-data-active">
+              <td scope="row">{{ product.productsId }}</td>
+              <td class="sku" scope="row" [innerHTML]="transform(product.sku)"></td>
+              <td scope="row">{{ product.customerSku }}</td>
+              <td scope="row">{{ product.productTypeName }}</td>
+              <td scope="row">{{ product.productName }}</td>
+              <!-- <td scope="row">{{ product.customerCodeNavigation.customerId }}</td> -->
+              <td scope="row">{{ product.jewelryTypeName }}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="col-md">
+        <div class="form-group product-image-container">
+          <div *ngIf="productImageList.length > 1 && imageIndex > 0" class="img-control img-prev" (click)="previousImage()">
+            <i class="fa fa-arrow-left"></i>
+          </div>
+
+          <img src="{{ProductPicPath}}">
+
+          <div *ngIf="productImageList.length > 1 && imageIndex < imageListSize" class="img-control img-next" (click)="nextImage()">
+            <i class="fa fa-arrow-right"></i>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+  <div class="form-row">
+
+    <div class="col-md-4 form-input-container">
+
+      <div class="form-row">
+
+        <div class="form-group col-md-4">
+          <div class="col-sm-12">
+            <select [(ngModel)]="this.product.productsTypeId" class="riva-input custom-select" [disabled]="!editMode">
+              <option *ngFor="let productType of productTypes" [value]="productType.value">{{ productType.text }}</option>
+            </select>
+            <div class="tool-tip">
+              <div class="arrow-down"></div>
+              Product Type
+            </div>
+          </div>
+        </div>
+
+        <div class="form-group col-md-4">
+          <div class="col-sm-12">
+            <select [(ngModel)]="this.product.jewelryType" class="riva-input custom-select" [disabled]="!editMode">
+              <option *ngFor="let jewelryType of jewelryTypes" [value]="jewelryType.jewelryTypeId">{{jewelryType.type}}</option>
+            </select>
+            <div class="tool-tip">
+              <div class="arrow-down"></div>
+              Jewelry Type
+            </div>
+          </div>
+        </div>
+
+        <div class="form-group col-md-4">
+          <div class="col-sm-12">
+            <select [(ngModel)]="this.product.uom" class="riva-input custom-select"
+                    [(value)]="selectedUOM" [disabled]="!editMode">
+              <option *ngFor="let unit of uom" [value]="unit.unitsOfMeasureId">{{unit.uom}}</option>
+            </select>
+            <div class="tool-tip">
+              <div class="arrow-down"></div>
+              UOM
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="form-row">
+
+        <div class="form-group col-md-6">
+          <div class="col-sm-12">
+            <input [(ngModel)]="product.sku" type="text" class="riva-input form-control" [ngClass]="{'is-invalid': error.sku}" placeholder="SKU" [disabled]="!editMode">
+            <div class="tool-tip">
+              <div class="arrow-down"></div>
+              SKU
+            </div>
+          </div>
+        </div>
+
+        <div class="form-group col-md-3">
+          <div class="col-sm-12">
+            <select [(ngModel)]="selectedCode" class="riva-input custom-select" [disabled]="!editMode">
+              <option *ngFor="let customer of customers" [value]="customer.custIdno">{{customer.customerId}}</option>
+            </select>
+            <div class="tool-tip">
+              <div class="arrow-down"></div>
+              CUST CODE
+            </div>
+          </div>
+        </div>
+
+        <div class="form-group col-md-3">
+          <div class="col-sm-12">
+            <input [(ngModel)]="product.customerSku" type="text" class="riva-input form-control" placeholder="CUST SKU" [disabled]="!editMode">
+            <div class="tool-tip">
+              <div class="arrow-down"></div>
+              CUST SKU
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="form-row">
+
+        <div class="form-group col-md-8">
+          <div class="col-sm-12">
+            <input [(ngModel)]="product.productName" type="text" class="riva-input form-control"
+                   [ngClass]="{'is-invalid': error.name}" placeholder="NAME" [disabled]="!editMode">
+            <div class="tool-tip">
+              <div class="arrow-down"></div>
+              Name
+            </div>
+          </div>
+        </div>
+
+        <div class="form-group col-md-4">
+          <div class="col-sm-12">
+            <select [(ngModel)]="product.status" class="riva-input custom-select" [disabled]="!editMode">
+              <option *ngFor="let status of statuses" [value]="status.statusId">{{status.status}}</option>
+            </select>
+            <div class="tool-tip">
+              <div class="arrow-down"></div>
+              Status
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="form-row">
+
+        <div class="form-group col-md-12">
+          <div class="col-sm-12">
+            <textarea id="descbox" [(ngModel)]="product.productDesc" [disabled]="!editMode"></textarea>
+            <div class="tool-tip">
+              <div class="arrow-down"></div>
+              Description
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+
+    <div class="col-md-4 form-group-sm">
+
+      <div class="form-row">
+
+        <div class="col-md">
+
+          <div class="form-group-boxed product-detail-panel">
+
+            <div class="form-group row mat-size-container">
+              <div class="col-sm-4">
+                <label>Materials</label>
+                <div class="mat-table">
+
+                  <div *ngFor="let item of prodMatList"
+                       class="mat-row"
+                       [ngClass]="{'mat-size': selectedMaterialCode == item, 'selected-mat-size': !highlightSize}"
+                       (click)="selectedMaterialCode = item; getSelectedProductsInfo();highlightSizes(item);">
+                    <span 
+                      *ngIf="matHasSize(item); else matDesc" 
+                      matBadge="!" 
+                      matBadgeOverlap="false"
+                      matBadgePosition="before"
+                      matBadgeSize="small">{{getMaterialDesc(item)}}</span>
+                    <ng-template #matDesc>{{getMaterialDesc(item)}}</ng-template>
+                  </div>
+                </div>
+
+              </div>
+              <div class="col-sm-4">
+                <label>Sizes</label>
+
+                <div class="size-table">
+                  <div *ngFor="let item of prodSizeList">
+                    <div *ngIf="sizeInMat(item); else disabledSize"
+                      [ngClass]="{'mat-size': selectedSize == item}"
+                      (click)="selectedSize = item; getSelectedProductsInfo();"
+                      class="size-row">
+                      {{item}}
+                    </div>
+
+                    <ng-template #disabledSize>
+                      <div class="size-row disabled-size">
+                        {{item}}
+                      </div>
+                    </ng-template>
+                  </div>
+                  <!-- <div *ngFor="let item of prodSizeList"
+                       [ngClass]="{'mat-size': selectedSize == item, 'selected-mat-size': highlightMats, 'disabled-size': !sizeInMat(item)}"
+                       (click)="selectedSize = item; getSelectedProductsInfo();"
+                       class="size-row">
+                    {{item}}
+                  </div>
+
+                  <ng-template *disabledSize class="size-row">
+                    {{item}}
+                  <ng-template> -->
+
+                </div>
+
+                <div *ngIf="editMode" class="product-detail-button-container mt-1 row">
+                  <button class="btn-confirm col-12" (click)="createMatSizeOpen(materialCreate);">Add Materials</button>
+                </div>
+              </div>
+              <div class="col-sm-4">
+                <div class="row">
+                  <div class="col-sm-4">
+                    <label>WGT (GT)</label>
+                  </div>
+                  <div class="col-sm-8">
+                    <input [(ngModel)]="selectedProductsInfo.weight" type="text" class="riva-input form-control" placeholder=""
+                           [disabled]="!editMode || selectedProductsInfo.productsInfoId == undefined ">
+                  </div>
+                </div>
+                <!-- <div class="row">
+                  <div class="col-sm-4">
+                    <label>WHLS__$</label>
+                  </div>
+                  <div class="col-sm-8">
+                    <input [(ngModel)]="selectedProductsInfo.priceWhls" type="text" class="riva-input form-control"
+                           placeholder="" [disabled]="!editMode || selectedProductsInfo.productsInfoId == undefined ">
+                  </div>
+                </div> -->
+                <div class="row">
+                  <div class="col-sm-4">
+                    <label>QTY</label>
+                  </div>
+                  <div class="col-sm-8">
+                    <input [(ngModel)]="selectedProductsInfo.stockQty" type="number" class="riva-input form-control" placeholder=""
+                           [disabled]="!editMode || selectedProductsInfo.productsInfoId == undefined ">
+                  </div>
+                </div>
+                <!-- <div class="row">
+                  <div class="col-sm-4">
+                    <label>MSRP__$</label>
+                  </div>
+                  <div class="col-sm-8">
+                    <input [(ngModel)]="selectedProductsInfo.priceRetail" type="text" class="riva-input form-control" placeholder=""
+                           [disabled]="!editMode || selectedProductsInfo.productsInfoId == undefined ">
+                  </div>
+                </div> -->
+
+                <div class="row" *ngIf="(selectedProductsInfo.materialCodeId > 0 && showMetalGrainsDropdown) || editMode">
+                  <select [(ngModel)]="selectedMetalGrain.metalGrainsId" (change)="setMetalGrainToProductInfo()" class="riva-input custom-select" [disabled]="!editMode">
+                    <option *ngFor="let item of metalGrainsDropdown" [value]="item.metalGrainsId">{{item.name}}</option>
+                  </select>
+                </div>
+
+                <!-- <form *ngIf="(productsInfo.length > 0 && showMetalGrainsDropdown) || editMode" class="example-form" style="width: 100%">
+                  <mat-form-field class="example-full-width" style="width: 100%" appearance="fill">
+                    <mat-label>Metal Grains</mat-label>
+                    <input type="text" matInput [(ngModel)]="selectedMetalGrain" [formControl]="metalGrainControl" [matAutocomplete]="auto">
+                    <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayFn">
+                      <mat-option *ngFor="let option of filteredMetalGrain | async" [value]="option">
+                        {{option.name}}
+                      </mat-option>
+                    </mat-autocomplete>
+                  </mat-form-field>
+                </form> -->
+
+                <!-- <mat-form-field appearance="fill" style="width: 100%">
+                  <mat-label>Choose an option</mat-label>
+                  <mat-select [(ngModel)]="selectedProductsInfo.metalGrainsId" [disabled]="!editMode">
+                    <mat-option *ngFor="let item of metalGrains" [value]="item.metalGrainsId">
+                      {{item.name}}
+                    </mat-option>
+                  </mat-select>
+                </mat-form-field> -->
+
+              </div>
+            </div>
+
+            <ng-template #materialCreate let-modal>
+              <div class="product-detail-popup">
+                <div class="modal-header row">
+                  <h5 class="modal-title col-10" id="modal-basic-title">Create Material and Sizes</h5>
+                  <button type="button" class="close col-2" aria-label="Close" (click)="modal.dismiss('Cross click')">
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+                </div>
+                <div class="modal-body">
+                  <div class="form-group">
+                    <div class="input-group">
+                      <label>Material Code</label>
+
+                      <select [(ngModel)]="modalMaterialCode" class="custom-select search-field">
+                        <option *ngFor="let mats of materialCodes" [value]="mats.materialCodeId">{{mats.description}}</option>
+                      </select>
+
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <div class="input-group">
+                      <label>SIZE</label>
+                      <input [(ngModel)]="modalSize" type="text" class="riva-input form-control" placeholder="">
+                    </div>
+                  </div>
+                  <!-- <div class="form-group">
+                    <mat-form-field appearance="fill" style="width: 100%">
+                      <mat-label>Choose an option</mat-label>
+                      <mat-select [(ngModel)]="selectedProductsInfo.metalGrainsId" [disabled]="!editMode">
+                        <mat-option *ngFor="let item of metalGrains" [value]="item.metalGrainsId">
+                          {{item.name}}
+                        </mat-option>
+                      </mat-select>
+                    </mat-form-field>
+                  </div> -->
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-confirm" (click)="modal.close('Save click');">Save</button>
+                </div>
+              </div>
+            </ng-template>
+
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+
+    <div class="col-md-4 form-group-sm">
+
+      <div *ngIf="editMode" class="form-group">
+        <div class="form-row">
+          <div class="col-md-4">
+            <input type="file" #uploadImage (change)="uploadProductImage(uploadImage.files)" style="display:none;" multiple>
+            <button class="btn-confirm" (click)="uploadImage.click()">UPLOAD</button>
+          </div>
+          <div class="col-md-4">
+            <button class="btn-confirm make-primary" (click)="updatePrimaryImage()">MAKE PRIMARY</button>
+          </div>
+          <div class="col-md-4">
+            <button class="btn-delete" (click)="deleteImage()" *ngIf="productImageList.length > 0">DELETE</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="form-row mt-1">
+        <div class="col-md-6">
+          <button *ngIf="!editMode" class="btn-confirm" (click)="toggleEdit()" [disabled]="product.productsId === undefined">EDIT</button>
+          <button *ngIf="editMode" class="btn-confirm" (click)="toggleCancel()">CANCEL</button>
+        </div>
+        <div class="col-md-6">
+          <button class="btn-confirm" [disabled]="!editMode" (click)="save()">SAVE</button>
+        </div>
+      </div>
+
+      <div class="form-row mt-1">
+        <div class="col-md-12">
+          <button class="btn-confirm" [disabled]="editMode" (click)="newProduct()">+ New</button>
+        </div>
+      </div>
+
+      <div class="form-row mt-1">
+        <div class="col-md-12">
+          <button class="btn-confirm" [disabled]="!editMode" (click)="createMatSizeOpen(addProductRouting);">Product Routing</button>
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+
+  <!-- <app-bill-of-materials [productInput]="product" [productInfoInput]="productsInfo" [selectedProductInfoInput]="selectedProductsInfo" [editModeInput]="editMode"></app-bill-of-materials> -->
+
+  <div class="form-row">
+    <div class="col-md-6">
+      <app-bill-of-materials-a [productInput]="product" [productInfoInput]="productsInfo" [selectedProductInfoInput]="selectedProductsInfo" [editModeInput]="editMode"></app-bill-of-materials-a>
+    </div>
+    <div class="col-md-6">
+      <app-bill-of-materials-b [productInput]="product" [productInfoInput]="productsInfo" [selectedProductInfoInput]="selectedProductsInfo" [editModeInput]="editMode"></app-bill-of-materials-b>
+    </div>
+  </div>
+
+</div>
+
+
+<ng-template #addProductRouting let-modal>
+  <div class="product-routing-popup">
+    <div class="modal-header row">
+      <h5 class="modal-title col-10" id="modal-basic-title">Product Routing</h5>
+      <button type="button" class="close col-2" aria-label="Close" (click)="modal.dismiss('Cross click')">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <div class="modal-body">
+
+      <div class="grid-table">
+        <div class="thead">
+          <div class="tr">
+            <!--<div class="td">Routing ID</div>-->
+            <div class="td">Activity Code</div>
+            <div class="td">Description</div>
+            <div class="td">Standard Time</div>
+            <div class="td">Comment</div>
+            <div class="td">
+              <button class="btn btn-outline-success col-md-6" (click)="addnewrouting()">
+                <i class="fa fa-plus"></i> Add
+              </button>
+              <button class="btn btn-outline-success col-md-6" [disabled]="EnableUpdateRouting" (click)="updateProductRouting()">
+                <i class="fa fa-arrow-circle-up"></i> Update
+              </button>
+            </div>
+            <div class="td">
+              <span *ngIf="notification" class="elementToFadeInAndOut">
+                <i class="fas fa-check-circle {{notification.class}}"></i>
+                {{notification.message}}
+              </span>
+            </div>
+          </div>
+        </div>
+
+        <div class="tbody">
+          <form class="tr" *ngFor="let prodroute of routingForms.controls; let i=index;" [formGroup]="prodroute">
+            <!--<div class="td">
+              <span>{{prodroute.value.productsRoutingId}}</span>
+            </div>-->
+            <div class="td">
+              <select class="form-control" formControlName="routingCodesId">
+                <option *ngFor="let item of routingCodes" value="{{item.routingCodesId}}">
+                  {{item.activityCode}}
+                </option>
+              </select>
+            </div>
+            <div class="td">
+              <span>{{getRoutingDescription(prodroute.value.routingCodesId)}}</span>
+            </div>
+            <div class="td stdtime">
+              <input type="number" class="form-control" value="{{prodroute.standardTime}}" formControlName="standardTime">
+            </div>
+
+            <div class="td comment">
+              <input class="form-control" value="{{prodroute.comment}}" formControlName="comment">
+            </div>
+            <div class="td">
+              <!--<button class="btn btn-outline-success col-8" type="submit">
+            <i class="fa fa-arrow-circle-up"></i> {{prodroute.get('productsRoutingId').value==0?'Submit':'Update'}}
+          </button>-->
+
+              <button class="btn btn-outline-success col-3" (click)="deleteRouting(prodroute.get('productsRoutingId').value,i)">
+                <i class="fa fa-trash-o"></i>
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+
+
+    </div>
+
+    <!--<div class="modal-footer">
+      <button type="button" class="btn btn-confirm" (click)="modal.close('Save click');">Save</button>
+    </div>-->
+  </div>
+</ng-template>

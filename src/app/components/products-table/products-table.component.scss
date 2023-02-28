@@ -1,0 +1,589 @@
+@import '../../../styles.scss';
+
+.form-input-container{
+    width: 520px !important;
+    flex-wrap: wrap;
+    min-width: 520px;
+    margin: 0 auto;
+}
+
+.btn-collapse{
+    @extend .center-position;
+    position: absolute;
+    width: 30px;
+    height: 30px;
+    padding: 0;
+}
+
+.search-panel{
+    // border: solid 1px yellow;
+    background-color: white;
+    margin-bottom: 10px;
+    width: 70%;
+    height: 40px;
+    min-width: 600px;
+
+    .custom-select, .search-text{
+        height: 30px;
+        font-size: 14px;
+    }
+
+    div{
+        height: inherit;
+    }
+
+    label{
+        @extend .center-position;
+        position: absolute;
+        margin-top: -20px;
+        padding-left: 10px;
+        color: white;
+        font-size: 11px;
+    }
+}
+
+.search-field{
+    @extend .center-position;
+    position: absolute;
+    width: calc(100% - 20px);
+}
+
+.field-item{
+    margin-right: 15px;
+    
+    label{
+        color: black;
+    }
+}
+
+label{
+    min-width: 170px;
+    text-align: left;
+    color: white;
+    text-transform: uppercase;
+}
+
+.form-group{
+    text-align: left;
+    padding: 5px !important;
+}
+
+input{
+    &::placeholder{
+        font-size: 12px;
+    }
+}
+
+.vertical-divider{
+    width: 1px;
+    border-right: 1px dashed $theme-color-contrast;
+    height: inherit;
+}
+
+input{
+    &::placeholder{
+        font-size: 12px;
+    }
+
+    &:disabled{
+        background-color: #2e2e2e !important;
+        color: white;
+    }
+}
+
+select{
+    &:disabled{
+        background-color: #2e2e2e !important;
+        color: white !important;
+    }
+    &::-ms-expand {
+        display: none;
+    }
+}
+
+.input-group-prepend{
+    
+    .input-group-text{
+        width: inherit;
+        color: black !important;
+    }
+}
+
+.input-group{
+    min-width: 145px;
+}
+
+.form-group-boxed{
+    border: 1px solid $theme-color;
+}
+
+.product-detail-panel{
+    position: relative;
+    font-family: Consolas;
+
+    .form-check{
+        padding-left: 40px;
+    }
+
+    .input-group-prepend{
+        width: 96px;
+    }
+
+    .group-label{
+        @extend .center-position;
+        position: absolute;
+        background-color: $theme-color;
+        color: white;
+        height: 20px;
+        width: 100px;
+        line-height: 20px;
+        text-align: center;
+        margin-top: -7px;
+    }
+}
+
+.form-group-sm{
+    width: 400px !important;
+    min-width: 325px;
+    margin: 0 auto;
+}
+
+h2{
+    display: inline-block;
+    width: 150px;
+}
+
+.btn-new{
+    border: none;
+    display: inline-block;
+    height: 40px;
+    line-height: 15px;
+
+    &:hover{
+        border: none;
+    }
+
+    &:disabled{
+        background-color: #2e2e2e !important;
+        color: white;
+    }
+}
+
+.table-collapsed{
+    height: 65px;
+}
+
+.table-row{
+    width: 100%;
+}
+
+.table-container{
+    border: solid 1px white;
+    height: 200px;
+    // width: 70%;
+    // min-width: 600px;
+    margin-bottom: 15px;
+    font-size: 14px;
+    padding: 0 !important;
+
+    table{
+        margin-bottom: 0;
+
+        th, td{
+            padding: 5px;
+        }
+    }
+
+    th:hover{
+        cursor: pointer;
+    }
+
+    .row-data, .row-data-active{
+        &:hover{
+            cursor: pointer;
+        }
+    }
+    .row-data-active{
+        background-color: $theme-color-contrast !important;
+		color: black;
+    }
+}
+
+.sku {
+    max-width : 200px;
+}
+
+.product-image-container{
+    height: 200px;
+    margin-top: 0;
+    overflow: hidden;
+    width: 450px;
+    padding: 0;
+
+    & img{
+        @extend .center-position;
+        width: auto;
+        height: auto;
+        max-width: 300px;
+        max-height: 100%;
+        position: absolute;
+    }
+}
+
+.mat-size{
+    background-color: $theme-color-contrast !important;
+    color: black !important;
+
+    & > span{
+        color: black;
+    }
+
+    &:hover{
+        background-color: #4d94ff;
+        color: white;
+    }
+}
+
+.selected-mat-size {
+    
+}
+
+.disabled-size{
+    color: grey !important;
+
+    &:hover{
+        background-color: transparent !important;
+        color: grey !important;
+        cursor: default !important;
+    }
+}
+
+.edit-size-dropdown{
+    position: absolute;
+    background-color: white;
+    font-size: 15px;
+    width: 85%;
+    z-index: 1;
+    border: solid 1px black;
+    border-top: none;
+
+    option{
+        padding-left: 10px;
+        padding-right: 10px;
+
+        &:hover{
+            background-color: #4d94ff;
+        }
+    }
+
+    input{
+        color: black; 
+        border: solid 1px black; 
+        padding-left: 10px; 
+        padding-right: 10px; 
+        width: 100%;
+    }
+}
+
+.collapse-container{
+    min-width: 80px;
+    max-width: 80px;
+}
+
+.img-control{
+    @extend .center-position;
+    position: absolute;
+    height: 50px;
+    width: 50px;
+    text-align: center;
+    line-height: 50px;
+    color: white;
+    font-size: 20px;
+
+    &:hover{
+        background-color: white !important;
+        color: black;
+    }
+}
+
+.img-prev{
+    margin-left: 0;
+}
+
+.img-next{
+    margin-right: 0;
+}
+
+.row{
+    background-color: #1D1D1D;
+    margin-left: 0;
+    margin-right: 0;
+
+    div{
+        background-color: transparent;
+    }
+}
+
+.btn-delete{
+    background-color: red;
+}
+
+.make-primary{
+    font-size: 14px;
+    padding: 0;
+}
+
+.color-band{
+    background-color: #4d4d4d;
+}
+
+.form-row {
+
+  .form-group {
+    margin-top: 0;
+
+    #descbox {
+      width: 534px;
+      background-color: #2e2e2e;
+      color: white;
+      border-color: white;
+      border-style: solid;
+      border-radius: 5px;
+    }
+
+    & > .col-sm-4 {
+      text-align: center;
+      line-height: 30px;
+      padding: 0;
+      padding-right: 5px;
+
+      & > label {
+        margin: 0;
+      }
+
+      & > .row {
+        padding-left: 5px;
+
+        & > div {
+          height: 40px;
+          line-height: 40px;
+          padding: 0;
+
+          & > input {
+            @extend .center-position;
+            position: absolute;
+          }
+
+          & > label {
+            font-size: 12px;
+          }
+        }
+      }
+    }
+  }
+
+  .form-group-sm {
+    margin: 0;
+
+    .form-group {
+      padding: 0;
+    }
+  }
+
+  .form-input-container {
+    margin: 0;
+  }
+}
+
+.tool-tip{
+    // @extend .center-position;
+    background-color: $theme-color-contrast;
+    margin-top: -55px;
+    border-radius: 2px;
+    display: none;
+    width: 100px;
+    text-align: center;
+
+    .arrow-down {
+        width: 0; 
+        height: 0;
+        border-left: 5px solid transparent;
+        border-right: 5px solid transparent;
+        border-top: 5px solid $theme-color-contrast;
+        position: absolute;
+        top: -5px;
+        left: 20px;
+    }
+}
+
+.riva-input{
+    padding: 2px;
+    height: 30px;
+
+    &:hover{
+        +.tool-tip{
+            display: block;
+        }
+    }
+}
+
+.mat-size-container{
+
+    .mat-table, .size-table{
+        height: 140px;
+        border: solid 1px white;
+        overflow: auto;
+
+        .mat-row, .size-row{
+            color: white;
+            height: 25px;
+            font-family: Consolas !important;
+
+            &:focus{
+                border: dotted 1px #4d4dff;
+            }
+
+            &:hover{
+                background-color: #4d4dff;
+                cursor: pointer;
+               
+            }
+        }
+
+        .row-highlight{
+            background-color: $theme-color-contrast;
+        }
+    }
+
+    .product-detail-button-container{
+        padding: 0 !important;
+
+        button{
+            height: 25px;
+            line-height: 3px;
+            font-size: 12px;
+        }
+    }
+
+}
+
+.product-detail-popup{
+    @extend .center-position;
+    position: fixed;
+    height: calc(63px + 119px + 83px + 55px); 
+    width: 20%; 
+    background-color: #1D1D1D;
+    border: solid 1px #EED253;
+    color: white;
+
+    .modal-header{
+        button{
+            height: 100%;
+        }
+    }
+}
+
+/*todo fix modal issue*/
+.modal {
+  z-index: 9999 !important;
+}
+.modal-dialog {
+    z-index : 9999!important;
+}
+
+.product-routing-popup {
+  @extend .center-position;
+  position: fixed;
+  top: 125px;
+  height: calc(100% - 150px);
+  width: 80%;
+  background-color: #1D1D1D;
+  border: solid 1px #EED253;
+  color: white;
+
+  .grid-table {
+    display: table;
+    width: 100%;
+  }
+
+  .thead {
+    display: table-header-group;
+    font-weight: bold;
+    border-bottom: 1px solid black;
+    text-align: center;
+    background-color: $background-color-light;
+  }
+
+  .tbody {
+    display: table-row-group;
+  }
+
+  .tr {
+    display: table-row;
+  }
+
+  .comment {
+    width: 750px;
+  }
+
+  .stdtime {
+    width: 100px;
+  }
+
+  .td {
+    display: table-cell;
+    padding: 10px 1px 1px 5px;
+  }
+
+  .thead div.tr div.td:last-child {
+    background-color: $background-color-light;
+  }
+
+  i:hover {
+    cursor: pointer;
+  }
+
+  input.ng-invalid.ng-touched, select.ng-invalid.ng-touched {
+    border-color: #dc3545;
+  }
+
+
+  .elementToFadeInAndOut {
+    -webkit-animation: fadeinout 2s linear forwards;
+    animation: fadeinout 2s linear forwards;
+    opacity: 0;
+  }
+
+  @-webkit-keyframes fadeinout {
+    50% {
+      opacity: 1;
+    }
+  }
+
+  @keyframes fadeinout {
+    50% {
+      opacity: 1;
+    }
+  }
+
+  .modal-header {
+    button {
+      height: 100%;
+    }
+  }
+
+  .example-form{
+    width: 100%;
+
+    .example-full-width{
+        width: 100%;
+    }
+  }
+}
+
+.mat-badge-content{
+    background-color: white;
+    top: 2px !important;
+    width: 10px;
+    height: 10px;
+}

@@ -1,0 +1,226 @@
+@import '../../../styles.scss';
+
+
+.materialcode {
+    height : 310px;
+    overflow-y : auto;
+}
+
+.selected-cut {
+  //   background-color: black!important;
+  border: dashed 1px #4d94ff;
+  background-color: deepskyblue;
+
+  td {
+    color: darkblue !important;
+    font-weight: 900 !important;
+  }
+}
+
+.table-container {
+  border: solid 1px white;
+  margin-bottom: 15px;
+  font-size: 14px;
+  padding: 0 !important;
+
+  table {
+    margin-bottom: 0;
+
+    th, td {
+      padding: 5px;
+      color: black;
+    }
+  }
+
+  th:hover {
+    cursor: pointer;
+  }
+
+  .row-data, .row-data-active {
+    &:hover {
+      cursor: pointer;
+    }
+  }
+
+  .row-data-active {
+    background-color: $theme-color-contrast !important;
+    color: black;
+  }
+}
+
+
+@media all and (min-width: 768px) {
+  tr {
+    td {
+      vertical-align: middle !important;
+    }
+
+    span {
+      &:not([class]) {
+        padding: 1rem 1rem;
+      }
+    }
+  }
+}
+
+#divMain {
+  background-color: $background-color-light;
+  padding-top: 55px;
+  overflow : hidden;
+
+  .container {
+    max-width: none !important;
+
+    .row {
+      &:hover {
+        cursor: pointer;
+      }
+
+
+
+      .search-field {
+        @extend .center-position;
+        position: absolute;
+        width: calc(100% - 20px);
+      }
+
+      .collapse-container {
+        min-width: 80px !important;
+        max-width: 80px !important;
+
+        .btn-collapse {
+          @extend .center-position;
+          position: absolute;
+          width: 30px;
+          height: 30px;
+          padding: 0;
+        }
+      }
+
+      .header-fixed {
+        width: 100%
+      }
+
+      thead {
+        background-color: whitesmoke;
+        color: black;
+      }
+
+      .header-fixed > thead,
+      .header-fixed > tbody,
+      .header-fixed > thead > tr,
+      .header-fixed > tbody > tr,
+      .header-fixed > thead > tr > th,
+      .header-fixed > tbody > tr > td {
+        display: block;
+      }
+
+      .header-fixed > tbody > tr:after,
+      .header-fixed > thead > tr:after {
+        content: ' ';
+        display: block;
+        visibility: hidden;
+        clear: both;
+      }
+
+      .header-fixed > tbody {
+        overflow-y: auto;
+        height: 200px;
+      }
+
+      .header-fixed > tbody > tr > td,
+      .header-fixed > thead > tr > th {
+        width: 33.33%; // NOTE : THIS WILL BE DIVIDED BY THE NO OF COLUMNS
+        float: left;
+      }
+
+      .gem-image-container {
+        height: 200px;
+        margin-top: 0;
+        overflow: hidden;
+        width: 450px;
+        padding: 0;
+        vertical-align: middle;
+
+        & img {
+          @extend .center-position;
+          width: auto;
+          height: auto;
+          max-width: 230px;
+          max-height: 100%;
+          position: absolute;
+        }
+      }
+
+      .img-prev {
+        margin-left: 0;
+      }
+
+      .img-next {
+        margin-right: 0;
+      }
+
+      .img-control-active {
+        background-color: #ffffffbb;
+
+        &:hover {
+          background-color: #ffffff;
+        }
+      }
+
+      .img-control {
+        @extend .center-position;
+        position: absolute;
+        height: 50px;
+        width: 50px;
+        text-align: center;
+        line-height: 50px;
+      }
+
+      .riva-input {
+        padding: 2px;
+        height: 30px;
+
+        &:hover {
+          + .tool-tip {
+            display: block;
+          }
+        }
+      }
+
+      .custom-select, .search-text {
+        height: 30px;
+        font-size: 14px;
+      }
+    }
+    // end row
+  }
+  // end container
+  .highlighted {
+    background-color: $theme-color-contrast !important;
+    color: black;
+  }
+
+  .strife {
+    background-color: #4d4d4d;
+    color: white;
+  }
+}
+
+.form-group-sm {
+  width: 400px !important;
+  min-width: 325px;
+  margin: 0 auto;
+}
+
+.pricelabel {
+  label {
+    color: whitesmoke;
+  }
+}
+
+#btnaddsize {
+  height: 39px !important;
+  background-color: #17a2b8;
+  color: #fff;
+}

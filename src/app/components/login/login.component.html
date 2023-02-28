@@ -1,0 +1,27 @@
+<div class="auth-container">
+    <div class="form-logo">
+        <img src="../../../assets/images/riva-logo.svg">
+    </div>
+    <form submit="loginUser()" class="auth-form">
+        <h2>LOGIN</h2>
+        <div class="form-group">
+            <input [(ngModel)]="login.userName" [ngModelOptions]="{standalone: true}"
+                type="text" 
+                class="floating-label-field floating-label-field--s3" 
+                placeholder="UserName" required/>
+            <label class="floating-label">UserName</label>
+            <div *ngIf="error.UserName" class="field-error-message indicator-required">UserName is required</div>
+        </div>
+        <div class="form-group">
+            <input [(ngModel)]="login.password" [ngModelOptions]="{standalone: true}"
+                type="Password" 
+                class="floating-label-field floating-label-field--s3" 
+                placeholder="Password" required/>
+            <label class="floating-label">Password</label>
+            <div *ngIf="error.Password" class="field-error-message indicator-required">Password is required</div>
+        </div>
+        <div class="form-group">
+            <button type="submit" class="btn-confirm" (click)="loginUser()">Login</button>
+        </div>
+    </form>
+</div>

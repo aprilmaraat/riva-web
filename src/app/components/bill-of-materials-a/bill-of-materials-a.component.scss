@@ -1,0 +1,28 @@
+@import '../bill-of-materials-b/bill-of-materials-b.component.scss';
+
+.options-container{
+    background-color: white;
+    color: black;
+    width: 40%;
+
+    .options-item{
+        &:hover{
+            background-color: #a6a6a6;
+            color: white;
+        }
+    }
+}
+
+#search-option{
+    border: solid 1px black; 
+    color: black; 
+    background-color: white;
+}
+
+.add-item{
+    color: black;
+    height: 49px;
+    line-height: 49px;
+    padding-left: 10px;
+    padding-right: 10px;
+}

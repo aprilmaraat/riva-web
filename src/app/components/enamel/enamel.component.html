@@ -1,0 +1,126 @@
+<div class="main">
+    <div class="row">
+        <div class="col">
+
+            <div class="row search-panel">
+                <div class="col">
+                    <input [(ngModel)]="searchString" (keyup)="searchTimeout()" class="form-control search-text search-field" type="text" placeholder="SEARCH"/>
+                </div>
+                <div class="col"></div>
+                <div class="col"></div>
+                <div class="col-2" style="color: white; line-height: 50px;">
+                    Items: {{filteredEnamels.length}}
+                </div>
+            </div>
+        
+            <div class="table-row row">
+                <div class="table-container col">
+                    <table class="table">
+                        <thead style="height: 40px !important;">
+                            <tr class="col">
+                                <th scope="col">ID</th>
+                                <th scope="col"></th>
+                                <th scope="col">SKU</th>
+                                <th scope="col">Name</th>
+                                <th scope="col">Pantone Color</th>
+                                <th scope="col">Hardness</th>
+                                <th scope="col">Supplier</th>
+                                <th scope="col">ColorHex</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr 
+                            *ngFor="let item of filteredEnamels" 
+                            class="row-data" 
+                            [ngClass]="{'row-data-active': item.enamelId === enamel.enamelId, 'color-band': applyColorBand(item)}"
+                            (click)="selectItem(item);">
+                                <td scope="row">{{item.enamelId}}</td>
+                                <td>
+                                    <div style="width: 30px; height: 30px;" [ngStyle]="{'background-color': item.colorHex}"></div>
+                                </td>
+                                <td scope="row">{{item.enamelSku}}</td>
+                                <td scope="row">{{item.enamelName}}</td>
+                                <td scope="row">{{item.pantoneColor}}</td>
+                                <td scope="row">{{item.hardness}}</td>
+                                <td scope="row">{{ supplierName(item.supplierId) }}</td>
+                                <td scope="row">{{item.colorHex}}</td>
+                            </tr>
+                        </tbody>
+                    </table>  
+                </div>
+            </div>
+
+            <div class="row mt-2">
+              <div class="col">
+                <button class="btn-confirm" (click)="new();" [disabled]="editMode">New <span class="fa fa-plus"></span></button>
+              </div>
+            </div>
+
+        </div>
+
+        <div class="col-4">
+            <div class="row">
+              <div class="color-preview" [ngStyle]="{'background-color': enamel.colorHex}"></div>
+            </div>
+            <div class="form-row">
+                <div class="form-group col-md">
+                  <label class="col-sm-2 col-form-label">Sku</label>
+                  <div class="col-sm-12">
+                    <input [(ngModel)]="enamel.enamelSku" type="text" class="form-control" placeholder="ENAMEL SKU" [disabled]="!editMode">
+                  </div>
+                </div>
+                <div class="form-group col-md">
+                  <label class="col-sm-2 col-form-label">Name</label>
+                  <div class="col-sm-12">
+                    <input [(ngModel)]="enamel.enamelName" type="text" class="form-control" placeholder="ENAMEL NAME" [disabled]="!editMode">
+                  </div>
+                </div>
+                <div class="form-group col-md">
+                  <label class="col-sm-2 col-form-label">Pantone Color</label>
+                  <div class="col-sm-12">
+                    <input [(ngModel)]="enamel.pantoneColor" type="text" class="form-control" placeholder="PANTONE COLOR" [disabled]="!editMode">
+                  </div>
+                </div>
+                <div class="form-group col-md form-check">
+                    <label class="col-sm-2 col-form-label">Hardness</label>
+                    <div class="col-sm-12">
+                        <select [(ngModel)]="enamel.hardness" class="custom-select form-control" [disabled]="!editMode">
+                          <option [value]="false">Soft</option>
+                          <option [value]="true">Hard</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group col-md">
+                    <label class="col-sm-2 col-form-label">suppliers</label>
+                    <div class="col-sm-12">
+                      <select [(ngModel)]="enamel.supplierId" class="custom-select form-control" [disabled]="!editMode">
+                        <option [value]="0" disabled>- Select -</option>
+                        <option *ngFor="let item of suppliers" value="{{item.suppliersId}}">({{item.supplierId}}) {{item.companyName}}</option>
+                      </select>
+                    </div>
+                  </div>
+                <div class="form-group col-md">
+                  <label class="col-sm-2 col-form-label">Color Hex: {{enamel.colorHex}}</label>
+                  <div class="col-sm-12">
+                    <input [(ngModel)]="enamel.colorHex" type="color" class="form-control" placeholder="COLOR HEX" [disabled]="!editMode">
+                  </div>
+                </div>
+
+              </div>
+
+              <div class="row mt-2">
+                <div class="col">
+                  <button class="btn-confirm" (click)="save();" [disabled]="!editMode">Save</button>
+                </div>
+                <div class="col">
+                    <button class="btn-confirm" (click)="toggleEdit(true);" [disabled]="editMode || filteredEnamels.length == 0">Edit</button>
+                </div>
+                <div class="col">
+                    <button class="btn-cancel" (click)="cancelChanges();" [disabled]="!editMode">Cancel</button>
+                </div>
+              </div>
+
+        </div>
+    </div>
+    
+</div>

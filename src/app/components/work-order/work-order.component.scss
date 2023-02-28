@@ -1,0 +1,123 @@
+@import '../../../styles.scss';
+
+.main{
+	height: calc(100% - 50px);
+}
+
+#print-section{
+  @extend .center-position;
+  position: relative;
+  color: black;
+  background-color: #b5b5b5;
+  width: 1400px;
+  padding: 30px 100px;
+  height: 800px;
+  overflow-y: auto;
+}
+
+.print-canvas{
+  padding: 30px;
+  background-color: white;
+  min-height: 1500px;
+
+  @media print{
+    padding: 0;
+    color-adjust: exact;
+    -webkit-print-color-adjust: exact;
+  }
+}
+
+.print-footer{
+  background-color: $background-color-light;
+  height: 50px;
+  width: 200px;
+  float: right;
+  padding: 10px;
+
+  @media print{
+    background-color: $background-color-light;
+  }
+
+  .logo-icon{
+    float: right;
+    height: 30px;
+    width: auto;
+    margin-right: 10px;
+  }
+}
+
+h2{
+  text-align: center;
+  color: black;
+}
+
+.btn-confirm{
+  width: auto;
+  margin: 15px;
+}
+
+.report-table{
+  @extend .center-position;
+  width: 100%;
+  border: solid 1px black;
+  th{
+    border: solid 1px black;
+    text-align: center;
+    background-color: $background-color-light;
+    color: white;
+  }
+  tr{
+    border: solid 1px black;
+
+    &:hover{
+      color: black !important;
+      background-color: transparent !important;
+    }
+
+    td{
+      border: solid 1px black;
+      text-align: center;
+      padding: 0;
+    }
+  }
+}
+
+.workorder-img{
+  position: relative;
+  width: 250px;
+  min-height: 250px;
+  float: right;
+  border: solid 3px black;
+
+  img{
+    width: 100%;
+    height: auto;
+  }
+}
+
+.divider{
+  position: relative;
+  width: 100%;
+  height: 6px;
+  background-color: $background-color-light;
+
+  .divider-label{
+    @extend .center-position;
+    position: absolute;
+    width: 200px;
+    height: 20px;
+    background-color: white;
+    text-align: center;
+  }
+}
+
+.row{
+  background-color: transparent;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+.col{
+  background-color: transparent;
+  margin: 0 !important;
+  padding: 0 !important;
+}

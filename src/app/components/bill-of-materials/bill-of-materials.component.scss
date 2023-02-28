@@ -1,0 +1,161 @@
+@import '../../../styles.scss';
+
+h2{
+    background-color: $theme-color;
+}
+
+.new-table-b{
+    margin-bottom: 0;
+    color: white;
+    line-height: 38px;
+}
+
+span{
+    &:hover{
+        cursor: pointer;
+    }
+}
+
+.table{
+    textarea{
+        width: 100%;
+        height: 100px;
+        background-color: #1D1D1D;
+        color: white;
+    }
+
+    .button{
+        &:hover{
+            cursor: pointer;
+        }
+    }
+}
+
+.bom-table{
+    th, td{
+        border-left: solid 1px white;
+        border-right: solid 1px white;
+    }
+}
+
+.row-data{
+    color: black;
+
+    td{
+        span{
+            &:hover{
+                cursor: pointer;
+            }
+        }
+    }
+}
+
+.table-b-item{ color: white; }
+
+.listed{
+    color: #bfbfbf;
+
+    span{
+        cursor: default !important;
+    }
+
+    &:hover{
+        cursor: default !important;
+        background-color: transparent !important;
+        color: #bfbfbf !important;
+    }
+}
+
+// Subassembly
+.row-item-sa{ background-color: #c156ff; }
+
+// Findings
+.row-item-finding{ background-color: #ffde5b; }
+
+.row-item-chain{ background-color: #ffa953; }
+
+// Manufactured Materials
+.row-item-mm{ background-color: #ff6262; }
+
+// Metal Grains
+// .row-item-mg{
+//     background-color: #009933;
+// }
+
+.row-item-enamel{ background-color: #4d4dff; }
+.row-item-gem{ background-color: #929292; }
+.row-item-np{ background-color: #28ffff; }
+
+.row{
+    width: 100%;
+    margin: 0;
+
+    .col{
+        padding: 0;
+        background-color: transparent;
+    }
+}
+
+.add-table-b-popup{
+    @extend .center-position;
+    position: fixed;
+    height: 65%; 
+    width: 90%; 
+    background-color: #1D1D1D;
+    border: solid 1px #EED253;
+    color: white;
+    overflow: auto;
+
+    .modal-header{
+        button{
+            height: 100%;
+        }
+    }
+
+    .no-group-item{
+        &:hover{
+            cursor: pointer;
+            background-color: $theme-color-contrast;
+            color: black;
+        }
+    }
+}
+
+.autosave-note{
+    font-size: 14px;
+    float: right;
+    line-height: 38px;
+    margin-right: 5px;
+    font-weight: 300;
+
+    &:hover{
+        cursor: default;
+    }
+}
+
+.options-container{
+    background-color: white;
+    color: black;
+    width: 40%;
+
+    .options-item{
+        &:hover{
+            background-color: #a6a6a6;
+            color: white;
+        }
+    }
+}
+
+#search-option{
+    border: solid 1px black; 
+    color: black; 
+    background-color: white;
+}
+
+.add-item{
+    color: black;
+    height: 49px;
+    line-height: 49px;
+    padding-left: 10px;
+    padding-right: 10px;
+}

@@ -1,0 +1,56 @@
+<!-- <riva-nav></riva-nav> -->
+<div class="form-container">
+  <h2>ORDER IMPORT</h2>
+  <div class="form-row form-input-container">
+
+    <div class="col-md-2">
+
+      <mat-form-field appearance="standard">
+        <mat-label>CUSTOMER</mat-label>
+        <mat-select [(ngModel)]="selectedCustomer">
+          <mat-option *ngFor="let customer of customers" [value]="customer.value">
+            {{customer.type}}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+
+    </div>
+    
+    <div *ngIf="selectedCustomer == 2" class="col-md-2">
+
+      <mat-form-field appearance="standard">
+        <mat-label>Due Date</mat-label>
+        <input [(ngModel)]="hofDueDate" matInput [min]="dateTimeFilter" [matDatepicker]="dp3" disabled>
+        <mat-datepicker-toggle matSuffix [for]="dp3"></mat-datepicker-toggle>
+        <mat-datepicker #dp3 disabled="false"></mat-datepicker>
+      </mat-form-field>
+
+    </div>
+
+    <input type="file" #excelUploader placeholder="Choose file" (change)="uploadFile(excelUploader.files)" style="display:none;" multiple>
+    <button type="button" class="btn-new btn-upload" (click)="excelUploader.click()">Upload</button>
+
+    <span *ngIf="invalidOrderItemsCount > 0"> Invalid Order Item(s): <span>{{ invalidOrderItemsCount }}</span> </span>
+    <span *ngIf="succeededOrderItemsCount > 0"> Valid Order Item(s): <span></span> </span>
+    <span *ngIf="orderExists"> Order already exists. </span>
+  </div>
+
+<table class="table">
+  <thead>
+    <tr class="col">
+      <th scope="col">Customer Order No</th>
+      <th scope="col">Product No</th>
+      <th scope="col">Error</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr class="row-data" *ngFor="let invalidOrder of orderImportResponse.invalidOrders">
+      <th scope="row">
+        {{ invalidOrder.orderNumber }}
+      </th>
+      <td>{{ invalidOrder.orderCode }}</td>
+      <td>{{ invalidOrder.errorMessage }}</td>
+    </tr>
+  </tbody>
+</table>
+</div>

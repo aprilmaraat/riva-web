@@ -1,0 +1,106 @@
+<div class="row">
+    <div class="col-2">
+        <div class="row">
+            <img class="productimage" src="{{product.picPath}}">
+        </div>
+    </div>
+    <div class="col-10">
+        <div class="row">
+            <div class="col-5">
+                <mat-form-field appearance="fill" style="width: 100%;">
+                    <mat-label>Product</mat-label>
+                    <input type="text"
+                           matInput
+                           [(ngModel)]="product"
+                           [formControl]="productControl"
+                           [matAutocomplete]="auto">
+                    <mat-autocomplete autoActiveFirstOption #auto="matAutocomplete" [displayWith]="displayFn">
+                      <mat-option *ngFor="let product of filteredProducts | async" [value]="product">
+                        {{product.productName}}
+                      </mat-option>
+                    </mat-autocomplete>
+                </mat-form-field>
+            </div>
+            <div class="pl-0 col-1">
+                <mat-form-field appearance="fill" style="width: 100%;">
+                    <mat-label>QTY ORDERED</mat-label>
+                    <input matInput type="number" [(ngModel)]="orderDetails.qtyordered">
+                </mat-form-field>
+            </div>
+            <div class="pl-0 col-1">
+                <mat-form-field appearance="fill">
+                    <mat-label>QTY SHIPPED</mat-label>
+                    <input matInput type="number" [(ngModel)]="orderDetails.qtyshipped" disabled>
+                </mat-form-field>
+            </div>
+            <div class="pl-0 col-1">
+                <mat-form-field appearance="fill">
+                    <mat-label>QTY INVOICED</mat-label>
+                    <input matInput type="number" [(ngModel)]="orderDetails.qtyinvoiced" disabled>
+                </mat-form-field>
+            </div>
+            <div class="col-2">
+                <mat-form-field appearance="fill" style="width : 170px" disabled>
+                    <mat-label>ENTRY DATE</mat-label>
+                    <input matInput [matDatepicker]="entryDate" [(ngModel)]="orderDetails.entryDate" disabled>
+                    <mat-datepicker-toggle matSuffix [for]="entryDate"></mat-datepicker-toggle>
+                    <mat-datepicker #entryDate></mat-datepicker>
+                </mat-form-field>
+            </div>
+            <div class="col-2">
+                <mat-form-field appearance="fill" style="width : 170px">
+                    <mat-label>DUE DATE</mat-label>
+                    <input matInput [matDatepicker]="dueDate" [(ngModel)]="orderDetails.dueDate" required>
+                    <mat-datepicker-toggle matSuffix [for]="dueDate"></mat-datepicker-toggle>
+                    <mat-datepicker #dueDate></mat-datepicker>
+                </mat-form-field>
+            </div>
+        </div>
+        <div class="row">
+            <div class="pr-0 col-1">
+                <mat-form-field appearance="fill">
+                    <mat-label>Material Code</mat-label>
+                    <input type="text"
+                           matInput
+                           [(ngModel)]="materialCode"
+                           [formControl]="materialCodeControl"
+                           [matAutocomplete]="auto1">
+                    <mat-autocomplete autoActiveFirstOption #auto1="matAutocomplete" [displayWith]="displayMatCode">
+                      <mat-option *ngFor="let matCode of filteredMaterialCodes | async" [value]="matCode">
+                        {{matCode.code}}
+                      </mat-option>
+                    </mat-autocomplete>
+                </mat-form-field>
+            </div>
+            <div class="pr-0 col-1">
+                <mat-form-field appearance="fill">
+                    <mat-label>Size</mat-label>
+                    <input type="text"
+                           matInput
+                           [(ngModel)]="materialSize"
+                           [formControl]="materialSizeControl"
+                           [matAutocomplete]="auto2">
+                    <mat-autocomplete autoActiveFirstOption #auto2="matAutocomplete" [displayWith]="displayMatSize">
+                      <mat-option *ngFor="let matSize of filteredMaterialSizes | async" [value]="matSize">
+                        {{matSize}}
+                      </mat-option>
+                    </mat-autocomplete>
+                </mat-form-field>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-8">
+                <mat-form-field appearance="fill" style="width: 100%;">
+                    <mat-label>COMMENT</mat-label>
+                    <textarea matInput style="height : 20px" [(ngModel)]="orderDetails.comment"></textarea>
+                </mat-form-field>
+            </div>
+            <div class="col-1"></div>
+            <div class="col-3">
+                <button class="btn btn-outline-success col-md-6 mb-2 float-right" (click)="save()">
+                    <i class="fa fa-save"></i> Save
+                </button>
+            </div>
+        </div>
+    </div>
+</div>

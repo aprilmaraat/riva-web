@@ -1,0 +1,48 @@
+@import '../../../styles.scss';
+
+.toggle-edit{
+    margin-top: 20px;
+    margin-left: 20px;
+    color: white;
+    text-transform: uppercase;
+}
+
+.form-input-container{
+    padding-top: 5px;
+    padding-bottom: 15px;
+    width: calc(50% - 0.5px);
+
+    label{
+        min-width: 170px;
+        text-align: left;
+        color: white;
+        text-transform: uppercase;
+    }
+    
+}
+
+.form-group{
+    margin-top: 10px;
+    text-align: left;
+}
+
+.vertical-divider{
+    width: 1px;
+    border-right: 1px dashed $theme-color-contrast;
+    height: inherit;
+}
+
+input{
+    &:disabled{
+        background-color: #2e2e2e !important;
+        color: white;
+    }
+}
+
+.table-container{
+    margin-top: 10px;
+
+    table{
+        margin-top: 0;
+    }
+}

@@ -1,0 +1,89 @@
+@import '../../../styles.scss';
+
+#divMain {
+  background-color: $background-color-light;
+  padding-top: 55px;
+
+  .card {
+    width: 99%
+  }
+
+
+  .custom-select {
+    height: 30px;
+    font-size: 14px;
+  }
+
+  h4, .col-form-label {
+    color: white;
+  }
+
+  hr {
+    background-color: white;
+  }
+
+  .col {
+    background-color: transparent;
+  }
+
+
+/*  .tool-tip {
+    @extend .center-position;
+    background-color: $theme-color-contrast;
+    margin-top: -55px;
+    border-radius: 2px;
+    display: none;
+    width: 100px;
+    text-align: center;
+
+    .arrow-down {
+      width: 0;
+      height: 0;
+      border-left: 5px solid transparent;
+      border-right: 5px solid transparent;
+      border-top: 5px solid $theme-color-contrast;
+      position: absolute;
+      top: -5px;
+      left: 20px;
+    }
+  }*/
+
+  /*img[title]:hover:after + .tool-tip {
+    content: attr(title);
+    position: absolute;
+    left: 50px;
+    transition: none;
+  }
+
+  #imgCarousel {*/
+    /*    padding: 2px;
+    height: 30px;*/
+    /*&img:hover:after {
+      + .tool-tip {
+        display: block;
+      }
+    }
+  }*/
+}
+#imgCarouse {
+  img[title]:hover:after {
+    content: attr(title);
+    position: absolute;
+    left: 50px;
+    transition: none;
+  }
+}
+
+/*
+.tooltip {
+  display: none;
+  position: absolute;
+  background: #ffe;
+  border: 1px solid #eed;
+  border-radius: 4px;
+  padding: 2px 4px;
+}
+*/
+/*img:hover + .tooltip {
+  display: block;
+}*/

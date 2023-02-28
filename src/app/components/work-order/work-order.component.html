@@ -1,0 +1,124 @@
+<div class="main">
+    <!-- <select [(ngModel)]="selectedOrderId" class="custom-select form-control" style="width: 10%; min-width: 200px;">
+        <option value="0" disabled> - SELECT ORDER - </option>
+        <option *ngFor="let item of orders" [value]="item.ordersId">{{item.pointernal}}</option>
+    </select> -->
+    <select [(ngModel)]="selectedOrderId" class="custom-select form-control" style="width: 10%; min-width: 200px;">
+        <option value="0" disabled> - SELECT ORDER - </option>
+        <option *ngFor="let item of orders" [value]="item.ordersId">{{item.pointernal}}</option>
+    </select>
+    <button type="button" class="btn btn-confirm" (click)="generateReport();" [disabled]="selectedOrderId <= 0"><i class="fa fa-plus-square"></i> GENERATE REPORT</button> 
+    <button type="button" class="btn btn-confirm" [useExistingCss]="true" printSectionId="print-section" ngxPrint [disabled]="order.ordersId <= 0"><i class="fa fa-print"></i> PRINT REPORT</button> 
+
+    <div id="print-section">
+        <div class="print-canvas" *ngIf="order.ordersId > 0">
+            <!-- <div class="print-header">
+                <img class="logo-icon" src="../../../assets/images/riva-logo.svg">
+            </div> -->
+            <br/>
+
+            <div class="report-label" >
+                <div class="row">
+                    <div class="col">
+                        <div class="row">
+                            <div class="col"><h1> WKO 0000001 </h1></div>
+                            <!-- <div class="col"></div> -->
+                        </div>
+                        <br/>
+                        <div class="row">
+                            <div class="col">PO INTERNAL: </div><div class="col font-weight-bold">{{order.pointernal}}</div>
+                            <div class="col"></div>
+                        </div>
+                        <div class="row">
+                            <div class="col">PO EXTERNAL: </div><div class="col font-weight-bold">{{order.poexternal}}</div>
+                            <div class="col"></div>
+                        </div>
+                        <div class="row">
+                            <div class="col">ENTRY DATE: </div><div class="col font-weight-bold">{{order.entryDate | date: 'mediumDate'}}</div>
+                            <div class="col"></div>
+                        </div>
+                        <div class="row">
+                            <div class="col">RECIEVED: </div><div class="col font-weight-bold">{{order.receivedDate | date: 'mediumDate'}}</div>
+                            <div class="col"></div>
+                        </div>
+                        <div class="row">
+                            <div class="col">REQUIRED: </div><div class="col font-weight-bold">{{order.requiredDate | date: 'mediumDate'}}</div>
+                            <div class="col"></div>
+                        </div>
+                    </div>
+                    <div class="col"></div>
+                    <div class="col">
+                        <div class="row">
+                            <div class="col">
+                                <div class="row">
+                                    <div class="col">SIZE: </div><div class="col font-weight-bold"><h4>{{test_workOrder.size}}</h4></div>
+                                </div>
+                                <div class="row">
+                                    <div class="col">METAL: </div><div class="col font-weight-bold"><h4>{{test_workOrder.metal}}</h4></div>
+                                </div>
+                            </div>
+                            <div class="col">
+                                <div class="workorder-img">
+                                    <img src="{{test_workOrder.itemPhoto}}">
+                                </div>
+                            </div>
+                        </div>
+                        
+                    </div>
+                </div>
+            </div>
+
+            <br/>
+            <div class="divider">
+                <div class="divider-label">BILL OF MATERIALS</div>
+            </div>
+            <br/>
+
+            <table class="report-table" *ngIf="bomList(test_workOrder.bomjson).length > 0">
+                <thead style="height: 40px !important;">
+                <tr class="col-4">
+                    <th scope="col">Type</th>
+                    <th scope="col">Name</th>
+                    <th scope="col">Quantity</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr *ngFor="let item of bomList(test_workOrder.bomjson)" class="row-data">
+                    <td scope="row" style="width: 150px;">{{ item.ItemType }}</td>
+                    <td scope="row">{{ item.Material }}</td>
+                    <td scope="row" style="width: 150px;">{{ item.BOM.QTY }}</td>
+                </tr>
+                </tbody>
+            </table>
+
+            <br/>
+            <div class="divider">
+                <div class="divider-label">ROUTING</div>
+            </div>
+            <br/>
+
+            <table class="report-table" *ngIf="routingList(test_workOrder.routingJSON).length > 0">
+                <thead style="height: 40px !important;">
+                <tr class="col-4">
+                    <th scope="col">Code</th>
+                    <th scope="col">Name</th>
+                    <th scope="col">Time (Seconds)</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr *ngFor="let item of routingList(test_workOrder.routingJSON)" class="row-data">
+                    <td scope="row" style="width: 150px;">{{ item.ActivityCode }}</td>
+                    <td scope="row">{{ item.ActivityDesc }}</td>
+                    <td scope="row" style="width: 150px;">{{ item.R.StandardTime }}</td>
+                </tr>
+                </tbody>
+            </table>
+
+            <br/>
+
+            <div class="print-footer">
+                <img class="logo-icon" src="../../../assets/images/riva-logo.svg">
+            </div>
+        </div>
+    </div>
+</div>

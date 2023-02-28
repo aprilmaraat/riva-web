@@ -1,0 +1,140 @@
+<div class="row main-row">
+    <div class="col">
+        <h2> Group <span *ngIf="!editMode" class="fa fa-plus" (click)="open(content)"></span></h2> 
+        <table class="table">
+            <thead>
+                <tr class="col">
+                    <th></th>
+                    <th>SKU</th>
+                    <th>Product Name</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let item of groupParents"
+                    [ngClass]="{'highlight-row': selectedParent.productsId === item.productsId, 'group-parent-row': !editMode}" 
+                    (click)="selectParent(item);">
+                    <td>
+                        <img class="group-item-img" src="{{item.picPath}}">
+                    </td>
+                    <td>{{item.sku}}</td>
+                    <td>{{item.productName}}</td>
+                    <td><span class="fa fa-times delete-item-button" (click)="removeGroup(item);"></span></td>
+                </tr>
+            </tbody>
+        </table>  
+    </div>
+
+    <div class="col-2">
+        <div class="row main-row mt-5">
+            <button class="btn-confirm" (click)="save();" [disabled]="!editMode">Save</button>
+        </div>
+        <div class="row main-row mt-2">
+            <button class="btn-confirm" (click)="toggleEdit(true);" [disabled]="editMode || groupParents.length == 0">Edit</button>
+        </div>
+        <div class="row main-row mt-2">
+            <button class="btn-cancel" (click)="cancelChanges();" [disabled]="!editMode">Cancel</button>
+        </div>
+    </div>
+
+    <div class="col">
+        <h2> Items <span *ngIf="editMode" class="fa fa-plus" (click)="open(addGroupContent)"></span></h2> 
+        <table class="table">
+            <thead>
+                <tr class="col">
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th>SKU</th>
+                    <th>Product Name</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let item of groupItems" class="group-parent-row">
+                    <td>
+                        <span *ngIf="(groupItems.indexOf(item) > 0) && editMode" (click)="reorderGroupItems(item, -1);" class="fa fa-arrow-up item-button"></span>
+                    </td>
+                    <td>
+                        <span *ngIf="(groupItems.indexOf(item) < (groupItems.length - 1)) && editMode" (click)="reorderGroupItems(item, 1);" class="fa fa-arrow-down item-button"></span>
+                    </td>
+                    <td>
+                        <img class="group-item-img" src="{{item.picPath}}">
+                    </td>
+                    <td>{{item.sku}}</td>
+                    <td>{{item.productName}}</td>
+                    <td><span *ngIf="editMode" class="fa fa-times delete-item-button" (click)="removeFromGroup(item);"></span></td>
+                </tr>
+            </tbody>
+        </table>  
+    </div>
+
+</div>
+
+<ng-template #content let-modal>
+    <div class="add-product-popup">
+      <div class="modal-header row">
+        <h5 class="modal-title col-10" id="modal-basic-title">Add Group</h5>
+        <button type="button" class="close col-2" aria-label="Close" (click)="modal.dismiss('Cross click')">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      
+      <div class="modal-body">
+        <input [(ngModel)]="searchString" (keyup)="searchTimeout()" class="form-control mb-3" type="text" placeholder="SEARCH"/>
+        <table class="table">
+          <thead>
+              <tr class="col">
+                  <th></th>
+                  <th>SKU</th>
+                  <th>Product Name</th>
+              </tr>
+          </thead>
+          <tbody>
+              <tr *ngFor="let item of notInGroup" class="no-group-item" (click)="createGroup(item.productsStoreInfo[0]);modal.dismiss('Added product');">
+                  <td>
+                      <img class="group-item-img" src="{{item.picPath}}">
+                  </td>
+                  <td>{{item.sku}}</td>
+                  <td>{{item.productName}}</td>
+              </tr>
+          </tbody>
+        </table> 
+      </div>
+  
+    </div>
+  </ng-template>
+
+  <ng-template #addGroupContent let-modal>
+    <div class="add-product-popup">
+  
+      <div class="modal-header row">
+        <h5 class="modal-title col-10" id="modal-basic-title">Add To Group</h5>
+        <button type="button" class="close col-2" aria-label="Close" (click)="modal.dismiss('Cross click')">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <input [(ngModel)]="searchString" (keyup)="searchTimeout()" class="form-control mb-3" type="text" placeholder="SEARCH"/>
+        <table class="table">
+          <thead>
+              <tr class="col">
+                  <th></th>
+                  <th>SKU</th>
+                  <th>Product Name</th>
+              </tr>
+          </thead>
+          <tbody>
+              <tr *ngFor="let item of notInGroup" class="no-group-item" (click)="addToGroup(item.productsStoreInfo[0]);modal.dismiss('Added product');">
+                  <td>
+                      <img class="group-item-img" src="{{item.picPath}}">
+                  </td>
+                  <td>{{item.sku}}</td>
+                  <td>{{item.productName}}</td>
+              </tr>
+          </tbody>
+        </table> 
+      </div>
+  
+    </div>
+  </ng-template>

@@ -1,0 +1,146 @@
+<table mat-table [dataSource]="dataSource" multiTemplateDataRows class="mat-elevation-z8">
+
+  <!-- Product name -->
+  <ng-container matColumnDef="productsId">
+    <th mat-header-cell *matHeaderCellDef>PRODUCT NAME</th>
+    <td mat-cell *matCellDef="let element">{{getProductName(element.productsId)}}</td>
+  </ng-container>
+
+  <!-- Size and material -->
+  <ng-container matColumnDef="productsInfoId">
+    <th mat-header-cell *matHeaderCellDef>MATERIAL AND SIZE</th>
+    <td mat-cell *matCellDef="let element">{{getProductInfoDescByID(element.productsInfoId)}}</td>
+  </ng-container>
+
+  <!-- Qty Ordered -->
+  <ng-container matColumnDef="qtyordered">
+    <th mat-header-cell *matHeaderCellDef>QTY ORDERED</th>
+    <td mat-cell *matCellDef="let element">{{element.qtyordered}}</td>
+  </ng-container>
+
+  <!-- Qty Shipped -->
+  <ng-container matColumnDef="qtyshipped">
+    <th mat-header-cell *matHeaderCellDef>QTY SHIPPED</th>
+    <td mat-cell *matCellDef="let element">{{element.qtyshipped}}</td>
+  </ng-container>
+
+  <!-- Qty Invoiced -->
+  <ng-container matColumnDef="qtyinvoiced">
+    <th mat-header-cell *matHeaderCellDef>QTY INVOICED</th>
+    <td mat-cell *matCellDef="let element">{{element.qtyinvoiced}}</td>
+  </ng-container>
+
+  <!-- EntryDate -->
+  <ng-container matColumnDef="entryDate">
+    <th mat-header-cell *matHeaderCellDef>ENTRY DATE</th>
+    <td mat-cell *matCellDef="let element">{{element.entryDate | date }}</td>
+  </ng-container>
+
+  <!-- dueDate -->
+  <ng-container matColumnDef="dueDate">
+    <th mat-header-cell *matHeaderCellDef>DUE DATE</th>
+    <td mat-cell *matCellDef="let element">{{element.dueDate | date }}</td>
+  </ng-container>
+
+  <!-- comment -->
+  <ng-container matColumnDef="comment">
+    <th mat-header-cell *matHeaderCellDef>COMMENT</th>
+    <td mat-cell *matCellDef="let element">{{element.comment}}</td>
+  </ng-container>
+
+  <tr mat-header-row *matHeaderRowDef="columnsToDisplay"></tr>
+  <tr mat-row *matRowDef="let element; columns: columnsToDisplay;" class="example-element-row"
+    [class.example-expanded-row]="expandedElement === element"
+    (click)="expandedElement = expandedElement === element ? null : element">
+  </tr>
+  <tr mat-row *matRowDef="let row; columns: ['expandedDetail']" class="example-detail-row"></tr>
+
+  <!-- Expanded Content Column - The detail row is made up of this one column that spans across all columns -->
+  <ng-container matColumnDef="expandedDetail">
+    <td mat-cell *matCellDef="let element" [attr.colspan]="columnsToDisplay.length">
+      <div class="example-element-detail" [@detailExpand]="element == expandedElement ? 'expanded' : 'collapsed'">
+        <div class="example-element-diagram">
+          <div class="row">
+            <div class="col-12">
+              <app-orderdetails-item [orderDetails]="element"></app-orderdetails-item>
+            </div>
+          </div>
+        </div>
+      </div>
+    </td>
+  </ng-container>
+</table>
+
+<table #newOrderDetailsTable mat-table [dataSource]="newOrderDetails" multiTemplateDataRows class="mat-elevation-z8">
+  <!-- Product name -->
+  <ng-container matColumnDef="productsId">
+    <th mat-header-cell *matHeaderCellDef>PRODUCT NAME</th>
+    <td mat-cell *matCellDef="let element">{{getProductName(element.productsId)}}</td>
+  </ng-container>
+
+  <!-- Size and material -->
+  <ng-container matColumnDef="productsInfoId">
+    <th mat-header-cell *matHeaderCellDef>MATERIAL AND SIZE</th>
+    <td mat-cell *matCellDef="let element">{{getProductInfoDescByID(element.productsInfoId)}}</td>
+  </ng-container>
+
+  <!-- Qty Ordered -->
+  <ng-container matColumnDef="qtyordered">
+    <th mat-header-cell *matHeaderCellDef>QTY ORDERED</th>
+    <td mat-cell *matCellDef="let element">{{element.qtyordered}}</td>
+  </ng-container>
+
+  <!-- Qty Shipped -->
+  <ng-container matColumnDef="qtyshipped">
+    <th mat-header-cell *matHeaderCellDef>QTY SHIPPED</th>
+    <td mat-cell *matCellDef="let element">{{element.qtyshipped}}</td>
+  </ng-container>
+
+  <!-- Qty Invoiced -->
+  <ng-container matColumnDef="qtyinvoiced">
+    <th mat-header-cell *matHeaderCellDef>QTY INVOICED</th>
+    <td mat-cell *matCellDef="let element">{{element.qtyinvoiced}}</td>
+  </ng-container>
+
+  <!-- EntryDate -->
+  <ng-container matColumnDef="entryDate">
+    <th mat-header-cell *matHeaderCellDef>ENTRY DATE</th>
+    <td mat-cell *matCellDef="let element">{{element.entryDate | date }}</td>
+  </ng-container>
+
+  <!-- dueDate -->
+  <ng-container matColumnDef="dueDate">
+    <th mat-header-cell *matHeaderCellDef>DUE DATE</th>
+    <td mat-cell *matCellDef="let element">{{element.dueDate | date }}</td>
+  </ng-container>
+
+  <!-- comment -->
+  <ng-container matColumnDef="comment">
+    <th mat-header-cell *matHeaderCellDef>COMMENT</th>
+    <td mat-cell *matCellDef="let element">{{element.comment}}</td>
+  </ng-container>
+
+  <tr mat-footer-row *matHeaderRowDef="columnsToDisplay"></tr>
+  <tr mat-row *matRowDef="let element; columns: columnsToDisplay;" class="example-element-row"
+    [class.example-expanded-row]="expandedElement === element"
+    (click)="expandedElement = expandedElement === element ? null : element">
+  </tr>
+  <tr mat-row *matRowDef="let row; columns: ['expandedDetail']" class="example-detail-row"></tr>
+
+  <!-- Expanded Content Column - The detail row is made up of this one column that spans across all columns -->
+  <ng-container matColumnDef="expandedDetail">
+    <td mat-cell *matCellDef="let element" [attr.colspan]="columnsToDisplay.length">
+      <div class="example-element-detail" [@detailExpand]="element == expandedElement ? 'expanded' : 'collapsed'">
+        <div class="example-element-diagram">
+          <div class="row">
+            <div class="col-12">
+              <app-new-orderdetails-item [orderDetails]="element"></app-new-orderdetails-item>
+            </div>
+          </div>
+        </div>
+      </div>
+    </td>
+  </ng-container>
+</table>
+
+<button style="width: 250px;" (click)="newOrderDetail()">ADD</button>

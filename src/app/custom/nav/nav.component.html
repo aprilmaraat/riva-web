@@ -1,0 +1,126 @@
+<div *ngIf="isLoggedIn$ | async as isLoggedIn; else loggedOut">
+  <div class="nav-container">
+    <img class="logo-icon icon" src="../../../assets/images/riva-logo.svg">
+
+    <div class="nav-menu">
+
+      <!-- Note: When adding new Menu/Submenu go to '../../models/constant/pages.const' -->
+
+      <div class="dropdown border-right">
+        <button class="dropbtn">
+          <i class="fa fa-bars" aria-hidden="true"></i>
+          LOGISTICS
+          <i class="fa fa-caret-down"></i>
+        </button>
+
+        <div class="dropdown-content">
+          <div *ngFor="let page of logistics"
+               class="submenu"
+               routerLink="{{page.url}}">
+            <i class="fa {{page.icon}}" style="font-size: 14px;"></i>
+            &nbsp;
+            {{page.name}}
+          </div>
+        </div>
+
+      </div>
+
+      <div class="dropdown border-right">
+        <button class="dropbtn">
+          <i class="fa fa-th-list" aria-hidden="true"></i>
+          ITEMS
+          <i class="fa fa-caret-down"></i>
+        </button>
+
+        <div class="dropdown-content">
+          <div *ngFor="let page of itemsPages"
+               class="submenu"
+               [ngClass]="{'font-size-10': page.name == 'Manufactured Materials'}"
+               routerLink="{{page.url}}">
+            <i class="fa {{page.icon}}" style="font-size: 14px;"></i>
+            &nbsp;
+            {{page.name}}
+          </div>
+        </div>
+
+      </div>
+
+      <div class="dropdown border-right">
+        <button class="dropbtn">
+          <i class="fa fa-male" aria-hidden="true"></i>
+          PD
+          <i class="fa fa-caret-down"></i>
+        </button>
+
+        <div class="dropdown-content">
+          <div *ngFor="let page of pdPages"
+               class="submenu"
+               [ngClass]="{'font-size-12': page.name == 'Supplier/Customer'}"
+               routerLink="{{page.url}}">
+            <i class="fa {{page.icon}}" style="font-size: 14px;"></i>
+            &nbsp;
+            {{page.name}}
+          </div>
+        </div>
+
+      </div>
+
+      <div class="dropdown border-right">
+        <button class="dropbtn">
+          <i class="fa fa-file-text" aria-hidden="true"></i>
+          REPORTS &amp;	 TOOLS
+          <i class="fa fa-caret-down"></i>
+        </button>
+
+        <div class="dropdown-content">
+          <div *ngFor="let page of reportsToolsPages"
+               class="submenu"
+               routerLink="{{page.url}}">
+            <i class="fa {{page.icon}}" style="font-size: 14px;"></i>
+            &nbsp;
+            {{page.name}}
+          </div>
+        </div>
+
+      </div>
+
+      <div class="dropdown">
+        <button class="dropbtn">
+          <i class="fa fa-cog"></i>
+          ADMIN
+          <i class="fa fa-caret-down"></i>
+        </button>
+
+        <div class="dropdown-content">
+          <div *ngFor="let page of adminPages"
+               class="submenu"
+               [ngClass]="{'font-size-12': page.name == 'Supplier/Customer'}"
+               routerLink="{{page.url}}">
+            <i class="fa {{page.icon}}" style="font-size: 14px;"></i>
+            &nbsp;
+            {{page.name}}
+          </div>
+        </div>
+
+      </div>
+
+
+
+    </div>
+
+    <div class="account-panel">
+      <span class="btn-link"> Logged as: {{ loggedUser }} </span>
+      <span class="btn-link" (click)="logout()"> LOGOUT </span>
+    </div>
+  </div>
+
+  <riva-load-content-overlay></riva-load-content-overlay>
+  <router-outlet></router-outlet>
+
+</div>
+
+<ng-template #loggedOut>
+  <div class="content-panel">
+    <riva-login></riva-login>
+  </div>
+</ng-template>

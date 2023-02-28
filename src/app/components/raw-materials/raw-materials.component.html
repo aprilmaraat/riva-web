@@ -1,0 +1,434 @@
+<div id="main">
+  <div class="row" style="margin-top : 100px">
+    <div class="col-8">
+      <div class="row">
+        <div class="col">
+          <span style="color: white;">LAST UPDATE BY : {{lastUpdated.username}} &#47; DATE : {{formatDate(lastUpdated.date)}}</span>
+        </div>
+
+      </div>
+
+      <div class="row search-panel">
+        <div class="col-6">
+          <input [(ngModel)]="searchString" (keyup)="searchTimeout()" class="form-control search-text search-field"
+                 type="text" placeholder="SEARCH" [disabled]="editMode" />
+        </div>
+
+        <!--<div class="col-2">
+          <select [(ngModel)]="selectedProductType" (change)="searchPanelChange()" class="custom-select search-field" [disabled]="editMode">
+            <option *ngFor="let productType of productTypes" [value]="productType.value">{{productType.text}}</option>
+          </select>
+        </div>
+        <div class="col-2">
+          <select [(ngModel)]="selectedCustomer" (change)="searchPanelChange()" class="custom-select search-field" [disabled]="editMode">
+            <option [value]="0">All</option>
+            <option *ngFor="let customer of customers" [value]="customer.custIdno">{{customer.customerId}}</option>
+          </select>
+        </div>
+        <div class="col-2">
+          <select [(ngModel)]="selectedJewelryType" (change)="searchPanelChange()" class="custom-select search-field" [disabled]="editMode">
+            <option [value]="0">All</option>
+            <option *ngFor="let jewelryType of jewelryTypes" [value]="jewelryType.jewelryTypeId">{{jewelryType.type}}</option>
+          </select>
+        </div>-->
+
+        <div class="col-1" style="color: white; line-height: 50px;">
+          Items: {{totalRawMaterials}}
+        </div>
+      </div>
+
+
+      <div class="table-row row">
+        <div id="rawMaterialTable" #productTable class="table-container"
+             [ngClass]="{'table-collapsed': tableCollapsed}"
+             (clickOutside)="tableActive = false;" (click)="tableActive = true;">
+          <div class="overlay"></div>
+          <table class="table">
+            <thead style="height: 40px !important;">
+              <tr class="col">
+                <th scope="col" (click)="onSort('rawMaterialsId')"><i class="fa" [ngClass]="sortClass('rawMaterialsId')"></i> ID</th>
+                <th scope="col" (click)="onSort('name')"><i class="fa" [ngClass]="sortClass('name')"></i> NAME</th>
+                <th scope="col" (click)="onSort('sku')"><i class="fa" [ngClass]="sortClass('sku')"></i> SKU</th>
+                <th scope="col" (click)="onSort('supplierSku')"><i class="fa" [ngClass]="sortClass('supplierSku')"></i> SUPPLIER SKU</th>
+                <th scope="col" (click)="onSort('qtyStock')"><i class="fa" [ngClass]="sortClass('qtyStock')"></i> QTY IN STOCK</th>
+                <th scope="col" (click)="onSort('stockLocation')"><i class="fa" [ngClass]="sortClass('stockLocation')"></i> STOCK LOCATION</th>
+              </tr>
+            </thead>
+            <tbody *ngIf="tableCollapsed === false && !editMode">
+              <tr *ngFor="let item of rawMaterials" class="row-data"
+                  [ngClass]="{'row-data-active': item.rawMaterialsId === rawMaterial.rawMaterialsId, 'color-band': applyColorBand(item)}"
+                  (click)="getRawMaterial(item)">
+                <td scope="row">{{ item.rawMaterialsId }}</td>
+                <td class="sku" scope="row">{{ item.name }}</td>
+                <td scope="row">{{ item.sku }}</td>
+                <td class="sku" scope="row">{{ item.supplierSku }}</td>
+                <td scope="row">{{ item.qtyStock}}</td>
+                <td scope="row">{{ item.stockLocation }}</td>
+              </tr>
+            </tbody>
+            <tbody *ngIf="tableCollapsed === false && editMode">
+              <tr *ngFor="let item of rawMaterials" class="row-data"
+                  [ngClass]="{'row-data-active': item.rawMaterialsId === rawMaterial.rawMaterialsId}">
+                <td scope="row">{{ item.rawMaterialsId }}</td>
+                <td class="sku" scope="row">{{ item.name }}</td>
+                <td scope="row">{{ item.sku }}</td>
+                <td class="sku" scope="row">{{ item.supplierSku }}</td>
+                <td scope="row">{{ item.qtyStock}}</td>
+                <td scope="row">{{ item.stockLocation }}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="col-6">
+          <!--// todo put here-->
+
+          <div class="form-row">
+            <div class="col">
+              <div class="card text-white bg-dark mb-3 border-light">
+                <div class="card-header border-light text-center">ITEM NAME &#47; SKU &#47; MATERIAL &#47; UOM</div>
+                <div class="card-body">
+
+                  <div class="row">
+
+                    <div class="form-group col-md-6">
+                      <div class="col-sm-12">
+                        <input type="text" class="riva-input form-control" [(ngModel)]="rawMaterial.name"
+                               placeholder="NAME" [disabled]="!editMode">
+                        <div class="tool-tip">
+                          <div class="arrow-down"></div>
+                          NAME
+                        </div>
+                      </div>
+                    </div>
+
+
+                    <div class="form-group col-md-6">
+                      <div class="col-sm-12">
+                        <input type="text" class="riva-input form-control" [(ngModel)]="rawMaterial.sku"
+                               placeholder="SKU" [disabled]="!editMode">
+                        <div class="tool-tip">
+                          <div class="arrow-down"></div>
+                          SKU
+                        </div>
+                      </div>
+                    </div>
+
+                  </div>
+
+
+                  <div class="row">
+
+                    <div class="form-group col-md-6">
+                      <div class="col-sm-12">
+                        <select [(ngModel)]="this.rawMaterial.materialCodeId" class="riva-input custom-select"
+                                [(value)]="this.rawMaterial.materialCodeId" [disabled]="!editMode">
+                          <option *ngFor="let mats of materialCodes" [value]="mats.materialCodeId">{{mats.description}}</option>
+                        </select>
+                        <div class="tool-tip">
+                          <div class="arrow-down"></div>
+                          MATERIAL CODE
+                        </div>
+                      </div>
+                    </div>
+
+
+                    <div class="form-group col-md-6">
+                      <div class="col-sm-12">
+                        <select [(ngModel)]="this.rawMaterial.unitsOfMeasureId" class="riva-input custom-select"
+                                [(value)]="selectedUOM" [disabled]="!editMode">
+                          <option *ngFor="let unit of uom" [value]="unit.unitsOfMeasureId">{{unit.uom}}</option>
+                        </select>
+                        <div class="tool-tip">
+                          <div class="arrow-down"></div>
+                          UOM
+                        </div>
+                      </div>
+                    </div>
+
+                  </div>
+
+
+
+                </div>
+              </div>
+            </div>
+
+          </div>
+
+          <div class="form-row">
+
+
+            <div class="col">
+              <div class="card text-white bg-dark mb-3 border-light">
+                <div class="card-header border-light text-center">SUPPLIER SKU &#47; PRICE &#47; CODE</div>
+                <div class="card-body">
+
+                  <div class="row">
+
+                    <div class="form-group col-md-4">
+                      <div class="col-sm-12">
+                        <input type="text" class="riva-input form-control" [(ngModel)]="rawMaterial.supplierSku"
+                               placeholder="SUPPLIER SKU" [disabled]="!editMode">
+                        <div class="tool-tip">
+                          <div class="arrow-down"></div>
+                          SUPPLIER SKU
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="form-group col-md-4">
+                      <div class="col-sm-12">
+                        <input type="text" class="riva-input form-control" [(ngModel)]="rawMaterial.supplierPrice"
+                               placeholder="SUPPLIER PRICE" [disabled]="!editMode">
+                        <div class="tool-tip">
+                          <div class="arrow-down"></div>
+                          SUPPLIER PRICE
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="form-group col-md-4">
+                      <div class="col-sm-12">
+                        <select [(ngModel)]="rawMaterial.suppliersId" class="riva-input custom-select"
+                                [(value)]="rawMaterial.suppliersId" [disabled]="!editMode">
+                          <option *ngFor="let sups of suppliers" [value]="sups.suppliersId">{{sups.supplierId}}</option>
+                        </select>
+
+                        <div class="tool-tip">
+                          <div class="arrow-down"></div>
+                          SUPPLIER CODE
+                        </div>
+                      </div>
+                    </div>
+
+                  </div>
+                </div>
+              </div>
+            </div>
+
+
+
+          </div>
+
+
+        </div>
+        <div class="col-6">
+          <div class="form-group row mat-size-container">
+            <div class="col-sm-4">
+              <label>Materials</label>
+              <div class="mat-table">
+                <div class="mat-row"
+                     *ngFor="let item of MatList"
+                     [ngClass]="{'mat-size': selectedMaterialCode == item, 'selected-mat-size': highlightSize}"
+                     (click)="selectedMaterialCode = item; getSelectedRawMaterialsInfo();highlightSizes(item);">
+                  <span *ngIf="editMode">*</span>{{getMaterialDesc(item)}}
+                </div>
+              </div>
+
+            </div>
+            <div class="col-sm-4">
+              <label>Sizes</label>
+
+              <div class="size-table">
+                <div class="size-row"
+                     *ngFor="let item of SizeList"
+                     [ngClass]="{'mat-size': selectedSize == item, 'selected-mat-size': highlightMats}"
+                     (click)="selectedSize = item; getSelectedRawMaterialsInfo();highlightMaterials(item);">
+                  {{item}}
+                </div>
+
+              </div>
+
+              <div *ngIf="editMode" class="product-detail-button-container mt-1 row">
+                <button class="btn-confirm col-12" (click)="createMatSizeOpen(materialCreate);">Add Materials</button>
+              </div>
+            </div>
+            <div class="col-sm-4">
+              <div class="row">
+                <div class="col-sm-4">
+                  <label>WGT (GT)</label>
+                </div>
+                <div class="col-sm-8">
+                  <input type="text"
+                         [(ngModel)]="selectedRawMaterialsInfo.weight"
+                         class="riva-input form-control" placeholder=""
+                         [disabled]="!editMode || selectedRawMaterialsInfo.rawMaterialsInfoId == undefined ">
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-sm-4">
+                  <label>QTY</label>
+                </div>
+                <div class="col-sm-8">
+                  <input type="number" class="riva-input form-control" placeholder=""
+                         [(ngModel)]="selectedRawMaterialsInfo.stockQty"
+                         [disabled]="!editMode || selectedRawMaterialsInfo.rawMaterialsInfoId == undefined ">
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="form-row">
+
+        <div class="col-6">
+          <div class="card text-white bg-dark mb-3 border-light">
+            <div class="card-header border-light text-center">STOCK &#47; PRICE &#47;LOCATION</div>
+            <div class="card-body">
+
+              <div class="row">
+
+                <div class="form-group col-md-4">
+                  <div class="col-sm-12">
+                    <input type="text" class="riva-input form-control" [(ngModel)]="rawMaterial.qtyStock"
+                           placeholder="STOCK QUANTITY" [disabled]="!editMode">
+                    <div class="tool-tip">
+                      <div class="arrow-down"></div>
+                      STOCK QUANTITY
+                    </div>
+                  </div>
+                </div>
+
+                <div class="form-group col-md-4">
+                  <div class="col-sm-12">
+                    <input type="text" class="riva-input form-control" [(ngModel)]="rawMaterial.sellPrice"
+                           placeholder="SELL PRICE" [disabled]="!editMode">
+                    <div class="tool-tip">
+                      <div class="arrow-down"></div>
+                      SELL PRICE
+                    </div>
+                  </div>
+                </div>
+
+
+                <div class="form-group col-md-4">
+                  <div class="col-sm-12">
+                    <input type="text" class="riva-input form-control" [(ngModel)]="rawMaterial.stockLocation"
+                           placeholder="Stock Location" [disabled]="!editMode">
+                    <div class="tool-tip">
+                      <div class="arrow-down"></div>
+                      STOCK LOCATION
+                    </div>
+                  </div>
+                </div>
+
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col">
+
+
+          <div class="card text-white bg-dark mb-3 border-light">
+            <div class="card-header border-light text-center">COMMENTS</div>
+            <div class="card-body">
+
+              <div class="row">
+
+                <div class="form-group col-md">
+                  <div class="col-sm-12">
+
+                    <textarea id="descbox" [(ngModel)]="rawMaterial.commentBox" [disabled]="!editMode"></textarea>
+
+                    <div class="tool-tip">
+                      <div class="arrow-down"></div>
+                      COMMENT
+                    </div>
+                  </div>
+                </div>
+
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+
+    <div class="col-md-4 form-group-sm p-5">
+
+      <div class="form-row text-center">
+        <img src="{{this.rawMaterial.picPath}}" width="230" height="230" class="mx-auto d-block">
+      </div>
+
+      <div class="form-row">
+
+
+      </div>
+
+      <div *ngIf="editMode" class="form-group">
+        <div class="form-row">
+          <div class="col-2"></div>
+          <div class="col-md-8">
+            <input type="file" #uploadImage style="display:none;" (change)="uploadProductImage(uploadImage.files)">
+            <button class="btn-confirm" (click)="uploadImage.click()">UPLOAD</button>
+          </div>
+          <!--<div class="col-md-4">
+            <button class="btn-confirm make-primary" >MAKE PRIMARY</button>
+          </div>-->
+          <!--<div class="col-md-4">
+            <button class="btn-delete" >DELETE</button>
+          </div>-->
+        </div>
+      </div>
+
+      <div class="form-row mt-1">
+        <div class="col-md-6">
+          <button *ngIf="!editMode" class="btn-confirm" (click)="toggleEdit()" [disabled]="editMode">EDIT</button>
+          <button *ngIf="editMode" class="btn-confirm" (click)="toggleCancel()">CANCEL</button>
+        </div>
+        <div class="col-md-6">
+          <button class="btn-confirm" (click)="save()" [disabled]="!editMode">SAVE</button>
+        </div>
+      </div>
+
+      <div class="form-row mt-1">
+        <div class="col-md-12">
+          <button class="btn-confirm" (click)="newProduct()" [disabled]="editMode">+ New</button>
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+
+
+  <ng-template #materialCreate let-modal>
+    <div class="product-detail-popup">
+      <div class="modal-header row">
+        <h5 class="modal-title col-10" id="modal-basic-title">Create Material and Sizes</h5>
+        <button type="button" class="close col-2" aria-label="Close" (click)="modal.dismiss('Cross click')">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="form-group">
+          <div class="input-group">
+            <label>Material Code</label>
+
+            <select [(ngModel)]="modalMaterialCode" class="custom-select search-field">
+              <option *ngFor="let mats of materialCodes" [value]="mats.materialCodeId">{{mats.description}}</option>
+            </select>
+
+          </div>
+        </div>
+        <div class="form-group">
+          <div class="input-group">
+            <label>SIZE</label>
+            <input [(ngModel)]="modalSize" type="number" class="riva-input form-control" placeholder="">
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-confirm" (click)="modal.close('Save click');">Save</button>
+      </div>
+    </div>
+  </ng-template>

@@ -1,0 +1,32 @@
+@import '../products-table/products-table.component.scss';
+@import '../manufactured-materials/manufactured-materials.component.scss';
+
+.main{
+    margin-top: 50px;
+}
+
+.search-panel{
+    width: 100%;
+}
+
+.main-row{
+    margin-left: 60px;
+    margin-right: 60px;
+}
+
+.row-data{
+    td{
+        height: 42px;
+        line-height: 32px;
+    }
+}
+
+.table-container{
+    height: 600px;
+}
+
+.row{
+    .form-group{
+        margin-top: 0;
+    }
+}

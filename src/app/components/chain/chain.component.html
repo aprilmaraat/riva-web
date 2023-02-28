@@ -1,0 +1,226 @@
+<!-- Editable table -->
+<div id="divMain">
+
+  <div class="row ml-5">
+    <div class="card text-white bg-dark mb-3 border-light" style="width : 1700px;">
+      <div class="card-header border-light text-center">CHAIN - STYLE &#47; SIZE INFO &#47; MATERIAL &#47; PRICE</div>
+      <div class="card-body">
+        <div class="row">
+          <div class="col-2">
+
+            <!--first box-->
+            <div class="row">
+              <div class="col-3">
+              </div>
+
+              <div class="col-9">
+
+
+                <div class="row">
+                  <div class="col">
+
+                    <div class="table-container">
+                      <table class="table">
+                        <thead style="height: 40px !important;">
+                          <tr class="col">
+                            <th scope="col"><i class="fa"></i>CHAIN STYLE</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+
+                          <!--(click)="getSelectedType(item);getHighlightedCut();"-->
+                          <tr *ngFor="let item of chainTypes" class="row-data"
+                              [ngClass]="{'row-data-active': item.chainTypeId === selectedChainType.chainTypeId}"
+                              (click)="getSelectedChainType(item);">
+                            <td scope="row">{{ item.chainTypeName }}</td>
+                          </tr>
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                </div>
+
+              </div>
+            </div>
+
+            <div class="row mt-2">
+              <div class="col-3"></div>
+              <div class="col-9">
+                <div *ngIf="isAuthorized" class="input-group mb-3">
+                  <div class="input-group-prepend">
+                    <button id="btnaddsize" class="btn btn-outline-secondary" type="button" (click)="addchainType();">Add Type</button>
+                  </div>
+                  <input type="text" class="form-control" placeholder="type" aria-label="" aria-describedby="basic-addon1"
+                         [(ngModel)]="newChainType">
+                </div>
+
+              </div>
+
+            </div>
+
+
+          </div>
+
+          <div class="col-2">
+            <div class="row">
+              <div class="col-3">
+              </div>
+
+              <div class="col-9">
+
+                <div class="row">
+                  <div class="col">
+                    <div class="table-container">
+                      <table class="table">
+                        <thead style="height: 40px !important;">
+                          <tr class="col">
+                            <th scope="col"><i class="fa"></i>SIZE INFO</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <tr *ngFor="let item of chainLinkSizes" class="row-data"
+                              [ngClass]="{'row-data-active': item.chainLinkSizeId === selectedChainLinkSizes.chainLinkSizeId}"
+                              (click)="getSelectedChainLinkSizes(item);">
+                            <td scope="row">{{ item.linkSize }}</td>
+                          </tr>
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                </div>
+
+              </div>
+
+            </div>
+
+
+            <div class="row mt-2">
+              <div class="col-3"></div>
+              <div class="col-9">
+                <div *ngIf="isAuthorized" class="input-group mb-3">
+                  <div class="input-group-prepend">
+                    <button id="btnaddsize" class="btn btn-outline-secondary" type="button" (click)="addLinkSize();">Add Size</button>
+                  </div>
+                  <input type="text" class="form-control" placeholder="new size" aria-label="" aria-describedby="basic-addon1"
+                         [(ngModel)]="newChainLinkSizes">
+                </div>
+
+              </div>
+
+            </div>
+
+
+
+          </div>
+
+          <div class="col-2">
+            <div class="row">
+              <div class="col-3">
+              </div>
+
+              <div class="col-9">
+
+                <div class="row">
+                  <div class="col materialcode">
+                    <div class="table-container">
+                      <table class="table">
+                        <thead style="height: 40px !important;">
+                          <tr class="col">
+                            <th scope="col"><i class="fa"></i>MATERIAL CODE</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+
+                          <!--[ngClass]="{'row-data-active': item.gemSizesId === selectedSize.gemSizesId}" (click)="getSelectedSize(item);"-->
+                          <tr *ngFor="let item of materialCodes" class="row-data"
+                              [ngClass]="{'row-data-active': item.materialCodeId === selectedMaterialCode.materialCodeId}"
+                              (click)="getSelectedMaterialCode(item);">
+                            <td scope="row">{{ item.description }}</td>
+                          </tr>
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                </div>
+
+              </div>
+
+            </div>
+
+
+            <!--<div class="row mt-2">
+              <div class="col-3"></div>
+              <div class="col-9">
+                <div class="input-group mb-3">
+                  <div class="input-group-prepend">
+                    <button id="btnaddsize" class="btn btn-outline-secondary" type="button" (click)="addsize();">Add Size</button>
+                  </div>
+                  <input type="text" class="form-control" placeholder="new size" aria-label="" aria-describedby="basic-addon1"
+                         [(ngModel)]="newSize">
+                </div>
+
+              </div>
+
+            </div>-->
+
+
+
+          </div>
+
+          <div class="col-6">
+
+            <div class="row ml-2">
+              <div class="col-8">
+                <div class="row pricelabel">
+
+                  <div class="form-group row">
+                    <label for="supplier" class="col-sm-3 col-form-label">Supplier</label>
+                    <label for="supplier" class="col-sm-1 col-form-label">:</label>
+                    <div class="col-sm-6">
+                      <select [(ngModel)]="selectedChain.suppliersId" class="form-control col-8"
+                              [(value)]="selectedChain.suppliersId" id="supplier" [disabled]="!isAuthorized">
+                        <option *ngFor="let sups of suppliers" [value]="sups.suppliersId">{{sups.supplierId}}</option>
+                      </select>
+                    </div>
+                  </div>
+
+                  <div class="form-group row">
+                    <label for="pricePerInch" class="col-sm-3 col-form-label">Price Per Inch</label>
+                    <label for="pricePerInch" class="col-sm-1 col-form-label">:</label>
+                    <div class="col-sm-6">
+                      <input type="number" class="form-control col-8" id="pricePerInch" placeholder="Price Per Inch"
+                             [(ngModel)]="selectedChain.pricePerInch" [disabled]="!isAuthorized">
+                    </div>
+                  </div>
+
+                  <div class="form-group row">
+                    <label for="qtyinstock" class="col-sm-3 col-form-label">Qty in Stock</label>
+                    <label for="qtyinstock" class="col-sm-1 col-form-label">:</label>
+                    <div class="col-sm-6">
+                      <input type="number" class="form-control col-8" id="qtyinstock" placeholder="Qty in Stock"
+                             [(ngModel)]="selectedChain.stockQty" [disabled]="!isAuthorized">
+                    </div>
+                  </div>
+
+                  <div class="form-group row d-flex justify-content-center text-center">
+                    <div class="col-sm-6">
+                      <button type="button" class="btn btn-info col-8" (click)="saveChain()">SAVE</button>
+                    </div>
+                  </div>
+
+
+                </div>
+
+              </div>
+
+            </div>
+
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+</div> <!--maindiv-->

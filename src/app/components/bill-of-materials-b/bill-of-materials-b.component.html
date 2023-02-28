@@ -1,0 +1,255 @@
+<h2 class="mt-3">BOM Table B 
+    <span *ngIf="autosaveCounter > 0 && showAutosaveCounter" class="autosave-note">
+        Saving... <span class="fa fa-refresh fa-spin"></span>
+    </span>
+    <span *ngIf="autosaveCounter == 0 && showAutosaveCounter" class="autosave-note">
+        Saved <span class="fa fa-check"></span>
+    </span>
+</h2>
+<table class="table bom-table">
+    <thead>
+        <th scope="col">QTY</th>
+        <th scope="col">SKU</th>
+        <th scope="col">Name</th>
+        <th scope="col">Notes</th>
+        <th scope="col">Locked Size</th>
+        <!-- <th scope="col"></th> -->
+        <th scope="col"></th>
+    </thead>
+    <tbody>
+        <tr *ngFor="let b of tableB_filteredByMatSize" class="row-data" [ngClass]="rowColor(b.itemType)">
+            <td scope="row">
+                <span *ngIf="!editMode">{{b.bomQty}}</span>
+                <input *ngIf="editMode" [(ngModel)]="b.bomQty" (change)="updateTableBItem(b);" type="number" style="border: solid 1px black; color: black; width: 50px;" >
+            </td>
+            <td scope="row">{{ b.sku }}</td>
+            <td scope="row">{{ b.itemName }}</td>
+            <td scope="row">
+                <span *ngIf="!editMode">{{ b.itemDescription }}</span>
+                <textarea *ngIf="editMode" [(ngModel)]="b.itemDescription" (change)="updateTableBItem(b);"></textarea>
+            </td>
+            <td scope="row">
+                <span *ngIf="!editMode">{{ b.isSizeDependent }}</span>
+                <input *ngIf="editMode" [(ngModel)]="b.isSizeDependent" (change)="updateTableBItem(b);" type="checkbox" style="border: solid 1px black; color: black; width: 50px;">
+            </td>
+            <td scope="row">
+                <span *ngIf="editMode" class="fa fa-times" (click)="delete(b.bomId)"></span>
+            </td>
+        </tr>
+    </tbody>
+</table>
+<div *ngIf="editMode">
+    <div class="row">
+        <div class="col">
+            <select [(ngModel)]="bomType" class="custom-select form-control" [disabled]="!editMode">
+                <option [value]="3">Chain</option>
+                <option [value]="4">Enamel</option>
+                <option [value]="5">Findings</option>
+                <option [value]="6">Gems</option>
+                <option [value]="7">Manufactured Materials</option>
+                <!-- <option [value]="8">Metal Grains</option> -->
+                <option [value]="9">Non-Precious</option>
+            </select>
+        </div>
+        <div class="col">
+            <h3 class="new-table-b">&nbsp;<span class="fa fa-plus" (click)="openModal(content); showTableBOptions(bomType);"></span></h3> 
+        </div>
+        <div class="col"></div>
+    </div>
+</div>
+
+<ng-template #content let-modal>
+    <div class="add-table-b-popup">
+      <div class="modal-header row">
+        <h5 class="modal-title col-10" id="modal-basic-title">Add BOM ({{getPopupLabel(bomType)}})</h5>
+        <button type="button" class="close col-2" aria-label="Close" (click)="modal.dismiss('Cross click')">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      
+      <div *ngIf="bomType == 6" class="modal-body">
+        <app-gems-bom (gemInventoryOutput)="addGemToTableB($event);"></app-gems-bom>
+      </div>
+
+      <div *ngIf="bomType != 6" class="modal-body">
+        <input *ngIf="bomType != 6" [(ngModel)]="searchString" (keyup)="searchTimeout()" class="form-control mb-3" type="text" placeholder="SEARCH"/>
+        <table class="table">
+          <thead>
+              <tr class="col">
+                  <th *ngFor="let column of popupTableB_ColumnNames">{{column}}</th>
+                  <th></th>
+              </tr>
+          </thead>
+
+          <!-- Chain -->
+          <tbody *ngIf="bomType == 3">
+            <tr 
+            *ngFor="let x of tableB_filtered" 
+            class="table-b-item row-data" 
+            [ngClass]="{'listed': checkIfListed(x.ID, bomType)}">
+                <td>{{x.ID}}</td>
+                <td>{{x.Name}}</td>
+                <td>{{x.SKU}}</td>
+                <td scope="row">
+                  <!-- <mat-form-field appearance="outline">
+                    <mat-select [(ngModel)]="sizeSelected">
+                      <mat-option [value]="0">-- None --</mat-option>
+                      <mat-optgroup *ngFor="let optionSize of getDistinctOptionSizes(x.ID)" [label]="getMaterial(optionSize.materialCodeId)"
+                                    [disabled]="false">
+                        <mat-option *ngFor="let info of getOptionSizes(optionSize.parentId)" [value]="info.id">
+                          {{info.size}}
+                        </mat-option>
+                      </mat-optgroup>
+                    </mat-select>
+                  </mat-form-field> -->
+                  <select 
+                  *ngIf="editMode" 
+                  class="custom-select form-control" 
+                  (change)="addToTableB(x.ID, bomType, 1, $event.srcElement.value);modal.dismiss('Add item')">
+                    <option [value]="" selected disabled>-- Select --</option>
+                    <option *ngFor="let info of getOptionSizes(x.ID)" [value]="info.id">
+                      {{info.size}}
+                    </option>
+                  </select>
+                </td>
+            </tr>
+          </tbody>
+
+          <!-- Enamel -->
+          <tbody *ngIf="bomType == 4">
+            <tr 
+            *ngFor="let x of tableB_filtered" 
+            class="table-b-item row-data" 
+            [ngClass]="{'listed': checkIfListed(x.enamelId, bomType)}">
+                <td>{{x.enamelId}}</td>
+                <td>{{x.enamelSku}}</td>
+                <td>
+                    {{x.enamelName}} <span *ngIf="checkIfListed(x.enamelId, bomType);">*listed*</span>
+                </td>
+                <td>{{x.pantoneColor}}</td>
+                <td>{{x.hardness}}</td>
+                <td>{{supplierName(x.supplierId)}}</td>
+                <td>
+                    <div style="width: 30px; height: 30px;" [ngStyle]="{'background-color': x.colorHex}"></div>
+                </td>
+                <td><span class="fa fa-plus" *ngIf="!checkIfListed(x.enamelId, bomType)" 
+                    (click)="addToTableB(x.enamelId, bomType, 1);"></span></td>
+            </tr>
+          </tbody>
+
+          <!-- Finding -->
+          <tbody *ngIf="bomType == 5">
+            <tr 
+            *ngFor="let x of tableB_filtered" 
+            class="table-b-item row-data" 
+            [ngClass]="{'listed': checkIfListed(x.ID, bomType)}">
+                <td>{{x.ID}}</td>
+                <td>{{x.Name}} <span *ngIf="checkIfListed(x.ID, bomType);">*listed*</span></td>
+                <td>{{x.SKU}}</td>
+                <td>{{x.Supplier}}</td>
+                <td>{{x.Unit}}</td>
+                <td>
+                  <select 
+                  *ngIf="editMode" 
+                  class="custom-select form-control" 
+                  (change)="addToTableB(x.ID, bomType, 1, $event.srcElement.value);modal.dismiss('Add item')">
+                    <option [value]="" selected disabled>-- Select --</option>
+                    <option *ngFor="let info of getOptionSizes(x.ID)" [value]="info.id">
+                      {{info.size}}
+                    </option>
+                  </select>
+                  <!-- <span class="fa fa-plus" *ngIf="!checkIfListed(x.ID, bomType)" 
+                    (click)="addToTableB(x.ID, bomType, 1);"></span> -->
+                </td>
+            </tr>
+          </tbody>
+
+          <!-- Gems -->
+          <!-- <tbody *ngIf="bomType == 6">
+            <tr 
+            *ngFor="let x of tableB_filtered" 
+            class="table-b-item row-data" 
+            [ngClass]="{'listed': checkIfListed(x.gemInventoryId, bomType)}">
+                <td>{{x.gemInventoryId}}</td>
+                <td>
+                    {{x.gemCuts.cutName}} {{x.gemTypes.colorClarity}} {{x.gemSizes.gemSizeDesc}} <span *ngIf="checkIfListed(x.gemInventoryId, bomType);">*listed*</span>
+                </td>
+                <td>{{x.pricePerCarat}}</td>
+                <td>{{x.pricePerUnit}}</td>
+                <td>{{x.caratWeight}}</td>
+                <td>{{supplierName(x.suppliersId)}}</td>
+                <td>
+                  <span class="fa fa-plus" *ngIf="!checkIfListed(x.gemInventoryId, bomType)" 
+                    (click)="addToTableB(x.gemInventoryId, bomType, 1);"></span>
+                </td>
+            </tr>
+          </tbody> -->
+
+          <!-- Manufactured Materials -->
+          <tbody *ngIf="bomType == 7">
+            <tr 
+            *ngFor="let x of tableB_filtered" 
+            class="table-b-item row-data" 
+            [ngClass]="{'listed': checkIfListed(x.ID, bomType)}">
+                <td>{{x.ID}}</td>
+                <td>{{x.Name}} <span *ngIf="checkIfListed(x.ID, bomType);">*listed*</span></td>
+                <td>{{x.SKU}}</td>
+                <td>{{x.Supplier}}</td>
+                <td>{{x.Unit}}</td>
+                <td>
+                  <select 
+                  *ngIf="editMode" 
+                  class="custom-select form-control" 
+                  (change)="addToTableB(x.ID, bomType, 1, $event.srcElement.value);modal.dismiss('Add item')">
+                    <option [value]="" selected disabled>-- Select --</option>
+                    <option *ngFor="let info of getOptionSizes(x.ID)" [value]="info.id">
+                      {{info.size}}
+                    </option>
+                  </select>
+                  <!-- <span class="fa fa-plus" *ngIf="!checkIfListed(x.ID, bomType)" 
+                    (click)="addToTableB(x.ID, bomType, 1);"></span> -->
+                </td>
+            </tr>
+          </tbody>
+
+          <!-- Metal Grains -->
+          <!-- <tbody *ngIf="bomType == 8">
+            <tr 
+            *ngFor="let x of popupTableB_RowData" 
+            class="table-b-item row-data" 
+            [ngClass]="{'listed': checkIfListed(x.ID, bomType)}">
+                <td>{{x.ID}}</td>
+                <td>{{x.Name}} <span *ngIf="checkIfListed(x.ID, bomType);">*listed*</span></td>
+                <td>{{x.SKU}}</td>
+                <td>{{x.Supplier}}</td>
+                <td>{{x['Supplier SKU']}}</td>
+                <td>{{x.Material}}</td>
+                <td>{{x.Unit}}</td>
+                <td>{{x['QTY in Stock']}}</td>
+                <td>{{x['QTY in Scrap']}}</td>
+                <td><span class="fa fa-plus" *ngIf="!checkIfListed(x.ID, bomType)" (click)="addToTableB(x.ID, bomType, 1);"></span></td>
+            </tr>
+          </tbody> -->
+
+          <!-- Nonprecious -->
+          <tbody *ngIf="bomType == 9">
+            <tr 
+            *ngFor="let x of tableB_filtered" 
+            class="table-b-item row-data" 
+            [ngClass]="{'listed': checkIfListed(x.ID, bomType)}">
+                <td>{{x.ID}}</td>
+                <td>{{x.Name}} <span *ngIf="checkIfListed(x.ID, bomType);">*listed*</span></td>
+                <td>{{x.SKU}}</td>
+                <td>{{x.Supplier}}</td>
+                <td>{{x.Unit}}</td>
+                <td>{{x['Stock QTY']}}</td>
+                <td>{{x['Supplier Price']}}</td>
+                <td><span class="fa fa-plus" *ngIf="!checkIfListed(x.ID, bomType)" (click)="addToTableB(x.ID, bomType, 1);"></span></td>
+            </tr>
+          </tbody>
+
+        </table>
+      </div>
+  
+    </div>
+  </ng-template>

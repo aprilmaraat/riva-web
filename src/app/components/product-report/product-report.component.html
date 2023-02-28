@@ -1,0 +1,87 @@
+<div class="main">
+  <button type="button" class="btn btn-confirm" (click)="generateReport();" [disabled]="productInventory.length > 0"><i class="fa fa-plus-square"></i> GENERATE REPORT</button> 
+  <button type="button" class="btn btn-confirm" printSectionId="print-section" ngxPrint [disabled]="productInventory.length == 0"><i class="fa fa-print"></i> PRINT REPORT</button> 
+  <div id="print-section">
+    <table class="table" *ngIf="productInventory.length > 0">
+      <thead style="height: 40px !important;">
+        <tr class="col">
+          <th scope="col">Product ID</th>
+          <th scope="col">Product Name</th>
+          <th scope="col">SKU</th>
+          <th scope="col">Product Type</th>
+          <th scope="col">Customer ID</th>
+          <th scope="col">Customer Company</th>
+          <th scope="col">Status</th>
+          <th scope="col">Jewelry Type</th>
+          <th scope="col">Materials</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let item of productInventory" class="row-data">
+          <td scope="row">{{ item.productsId }}</td>
+          <td scope="row">{{ item.productName }}</td>
+          <td scope="row">{{ item.sku }}</td>
+          <td scope="row">{{ item.productType }}</td>
+          <td scope="row">{{ item.customerId }}</td>
+          <td scope="row">{{ item.companyName }}</td>
+          <td scope="row">{{ item.status }}</td>
+          <td scope="row">{{ item.jewelryType }}</td>
+          <td scope="row">
+
+            <table class="table">
+              <thead>
+                <tr class="col">
+                  <th scope="col">Code</th>
+                  <th scope="col">Description</th>
+                  <th scope="col">Info</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr class="row-data" *ngFor="let material of loadProductMaterialInfo(item.productsId)">
+                  <td scope="row">{{material.Code}}</td>
+                  <td scope="row">{{material.Description}}</td>
+                  <td scope="row">
+
+                    <table class="table">
+                      <thead>
+                        <tr class="col">
+                          <th scope="col">Size</th>
+                          <th scope="col">Weight</th>
+                          <th scope="col">Wholesale</th>
+                          <th scope="col">Retail</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr class="row-data" *ngFor="let pi of material.PI">
+                          <td scope="row">{{pi.Size}}</td>
+                          <td scope="row">{{pi.Weight}}</td>
+                          <td scope="row">{{pi.Wholesale}}</td>
+                          <td scope="row">{{pi.Retail}}</td>
+                        </tr>
+                      </tbody>
+                    </table>
+
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+
+            <!-- <div class="row" *ngFor="let material of loadProductMaterialInfo(item.productsId)">
+              <div class="col-2">{{material.Code}}</div>
+              <div class="col-5">{{material.Description}}</div>
+              <div class="col-5">
+                <div class="row" *ngFor="let pi of material.PI">
+                  <div class="col">{{pi.Size}}</div>
+                  <div class="col">{{pi.Weight}}</div>
+                  <div class="col">{{pi.Wholesale}}</div>
+                  <div class="col">{{pi.Retail}}</div>
+                </div>
+              </div>
+            </div> -->
+
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

@@ -1,0 +1,96 @@
+@import '../products-table/products-table.component.scss';
+
+h2{
+    line-height: 38px;
+
+    span{
+        &:hover{
+            cursor: pointer;
+        }
+    }
+}
+
+.group-item-img{
+    height: 20px;
+    width: auto;
+}
+
+.group-parent-row{
+    &:hover{
+        cursor: pointer;
+        color: $theme-color-contrast;
+    }
+}
+
+.selected-parent{
+    background-color: $theme-color-contrast;
+    color: black;
+}
+
+.add-product-popup{
+    @extend .center-position;
+    position: fixed;
+    height: 80%; 
+    width: 50%; 
+    background-color: #1D1D1D;
+    border: solid 1px #EED253;
+    color: white;
+    overflow: auto;
+
+    .modal-header{
+        button{
+            height: 100%;
+        }
+    }
+
+    .no-group-item{
+        &:hover{
+            cursor: pointer;
+            background-color: $theme-color-contrast;
+            color: black;
+        }
+    }
+}
+
+.delete-item-button{
+    &:hover{
+        color: red;
+    }
+}
+
+$item-button-size: 30px;
+
+.item-button{
+    height: $item-button-size;
+    width: $item-button-size;
+    line-height: $item-button-size;
+    text-align: center;
+
+    &:hover{
+        background-color: $theme-color-contrast;
+        color: black;
+    }
+    &:active{
+        background-color: $theme-color;
+        color: white;
+    }
+}
+
+td{
+    height: 100px;
+    img{
+        height: auto;
+        width: 75px;
+    }
+    line-height: 75px;
+}
+
+
+.highlight-row{
+    background-color: $theme-color-contrast;
+    color: black;
+
+    &:hover{
+        color: black !important;
+    }
+}

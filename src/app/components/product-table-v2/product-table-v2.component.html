@@ -1,0 +1,93 @@
+<div>
+    <div class="row">
+        <div class="row search-panel">
+            <div *ngIf="showCollapseButton" class="col-1 collapse-container">
+                <button class="btn-collapse" (click)="tableCollapsed = !tableCollapsed">
+                    <i *ngIf="tableCollapsed" class="fa fa-plus"></i>
+                    <i *ngIf="tableCollapsed === false" class="fa fa-minus"></i>
+                </button>
+            </div>
+            <div class="col">
+                <input [(ngModel)]="searchString" (keyup)="searchTimeout()" class="form-control search-text search-field" type="text" placeholder="SEARCH" [disabled]="editMode"/>
+            </div>
+
+            <div class="col-2">
+                <select [(ngModel)]="selectedProductType" (change)="searchPanelChange()" class="custom-select search-field" [disabled]="editMode">
+                    <option *ngFor="let productType of productTypes" [value]="productType.value">{{productType.text}}</option>
+                </select>
+            </div>
+            <div class="col-2">
+                <select [(ngModel)]="selectedCustomer" (change)="searchPanelChange()" class="custom-select search-field" [disabled]="editMode">
+                    <option [value]="0">All</option>
+                    <option *ngFor="let customer of customers" [value]="customer.custIdno">{{customer.customerId}}</option>
+                </select>
+            </div>
+            <div class="col-2">
+                <select [(ngModel)]="selectedJewelryType" (change)="searchPanelChange()" class="custom-select search-field" [disabled]="editMode">
+                    <option [value]="0">All</option>
+                    <option *ngFor="let jewelryType of jewelryTypes" [value]="jewelryType.jewelryTypeId">{{jewelryType.type}}</option>
+                </select>
+            </div>
+
+            <div class="col-1" style="color: white; line-height: 50px;">
+                Items: {{totalProducts}}
+            </div>
+        </div>
+
+        <div class="table-row row">
+            <div id="productTable" #productTable class="table-container" [ngClass]="{'table-collapsed': tableCollapsed}" (clickOutside)="tableActive = false;" (click)="tableActive = true;">
+                <div class="overlay"></div>
+                <table class="table">
+                    <thead style="height: 40px !important;">
+                        <tr class="col">
+                            <th scope="col" (click)="onSort('productsId')"><i class="fa" [ngClass]="sortClass('productsId')"></i> ID</th>
+                            <th scope="col" (click)="onSort('sku')"><i class="fa" [ngClass]="sortClass('sku')"></i> SKU</th>
+                            <th scope="col" (click)="onSort('customerSku')"><i class="fa" [ngClass]="sortClass('customerSku')"></i> Cust SKU</th>
+                            <th scope="col" (click)="onSort('productTypeName')"><i class="fa" [ngClass]="sortClass('productTypeName')"></i> Product Type</th>
+                            <th scope="col" (click)="onSort('productName')"><i class="fa" [ngClass]="sortClass('productName')"></i> Name</th>
+                            <th scope="col" (click)="onSort('customerCode')"><i class="fa" [ngClass]="sortClass('customerCode')"></i> Cust Code</th>
+                            <th scope="col" (click)="onSort('jewelryTypeName')"><i class="fa" [ngClass]="sortClass('jewelryTypeName')"></i> Jewelry Type</th>
+                            <th scope="col" (click)="onSort('inStore')"><i class="fa" [ngClass]="sortClass('inStore')"></i> In Store</th>
+                        </tr>
+                    </thead>
+                    <tbody *ngIf="tableCollapsed === false && !editMode">
+                        <tr *ngFor="let item of products" class="row-data" [ngClass]="{'row-data-active': item.productsId === product.productsId, 'color-band': applyColorBand(item)}" (click)="getProductLocal(item)">
+                            <td scope="row">{{ item.productsId }}</td>
+                            <td scope="row">{{ item.sku }}</td>
+                            <td scope="row">{{ item.customerSku }}</td>
+                            <td scope="row">{{ item.productTypeName }}</td>
+                            <td scope="row">{{ item.productName }}</td>
+                            <td scope="row">{{ getCustomerName(item.customerCode) }}</td>
+                            <td scope="row">{{ item.jewelryTypeName }}</td>
+                            <td scope="row" [ngClass]="{'highlight-text': item.inStore}">{{ item.inStore }}</td>
+                        </tr>
+                    </tbody>
+                    <tbody *ngIf="tableCollapsed === false && editMode">
+                        <tr *ngFor="let item of products" class="row-data" [ngClass] [ngClass]="{'row-data-active': item.productsId === product.productsId}">
+                            <td scope="row">{{ item.productsId }}</td>
+                            <td scope="row">{{ item.sku }}</td>
+                            <td scope="row">{{ item.customerSku }}</td>
+                            <td scope="row">{{ item.productTypeName }}</td>
+                            <td scope="row">{{ item.productName }}</td>
+                            <td scope="row">{{ getCustomerName(item.customerCode) }}</td>
+                            <td scope="row">{{ item.jewelryTypeName }}</td>
+                            <td></td>
+                        </tr>
+                    </tbody>
+                    <tbody *ngIf="tableCollapsed">
+                        <tr class="row-data-active">
+                            <td scope="row">{{ product.productsId }}</td>
+                            <td scope="row">{{ product.sku }}</td>
+                            <td scope="row">{{ product.customerSku }}</td>
+                            <td scope="row">{{ product.productTypeName }}</td>
+                            <td scope="row">{{ product.productName }}</td>
+                            <td scope="row">{{ product.customerCode }}</td>
+                            <td scope="row">{{ product.jewelryTypeName }}</td>
+                            <td></td>
+                        </tr>
+                    </tbody>
+                </table>  
+            </div>
+        </div>
+    </div>
+</div>

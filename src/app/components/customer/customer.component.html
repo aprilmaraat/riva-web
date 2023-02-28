@@ -1,0 +1,199 @@
+
+<div class="row">
+    <div class="col">
+
+        <div class="row search-panel">
+            <div class="col">
+                <input [(ngModel)]="searchString" (keyup)="searchTimeout()" class="form-control search-text search-field" type="text" placeholder="SEARCH"/>
+            </div>
+            <div class="col"></div>
+            <div class="col"></div>
+            <div class="col-1" style="color: white; line-height: 50px;">
+                Items: {{filteredCustomers.length}}
+            </div>
+        </div>
+    
+        <div class="table-row row">
+            <div class="table-container col">
+                <table class="table">
+                    <thead style="height: 40px !important;">
+                        <tr class="col">
+                            <th scope="col">ID</th>
+                            <th scope="col">Customer ID</th>
+                            <th scope="col">Company</th>
+                            <th scope="col">Contact</th>
+                            <th scope="col">Email</th>
+                            <th scope="col">Shipping Method</th>
+                            <th scope="col">Payment Terms</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr 
+                        *ngFor="let item of filteredCustomers" 
+                        class="row-data" 
+                        [ngClass]="{'row-data-active': item.custIdno == customer.custIdno, 'color-band': applyColorBand(item)}"
+                        (click)="selectItem(item);">
+                            <td scope="row">{{item.custIdno}}</td>
+                            <td scope="row">{{item.customerId}}</td>
+                            <td scope="row">{{item.companyName}}</td>
+                            <td scope="row">{{item.contactName}}</td>
+                            <td scope="row">{{item.emailAddress}}</td>
+                            <td scope="row">{{item.shippingMethod}}</td>
+                            <td scope="row">{{item.paymentTerms}}</td>
+                        </tr>
+                    </tbody>
+                </table>  
+            </div>
+        </div>
+
+        <div class="row mt-2">
+          <div class="col">
+            <button class="btn-confirm" (click)="new();" [disabled]="editMode">New <span class="fa fa-plus"></span></button>
+          </div>
+        </div>
+
+    </div>
+
+    <div class="col-4">
+      <!-- <div class="form-row"> -->
+        <div class="form-row" style="padding-top: 50px;">
+          <div class="form-group col-md">
+            <div class="form-group product-image-container">
+              <img src="{{customer.picPath}}">
+              <input type="file" #uploadImage (change)="uploadTemp(uploadImage.files)" style="display:none;">
+              <button *ngIf="editMode" class="btn-confirm btn-upload-photo" (click)="uploadImage.click()">UPLOAD</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="form-group col-md">
+            <label class="col-sm-2 col-form-label">Customer ID</label>
+            <div class="col-sm-12">
+              <input [(ngModel)]="customer.customerId" type="text" class="form-control" placeholder="SUPPLIER ID" [disabled]="!editMode">
+            </div>
+          </div>
+
+          <div class="form-group col-md">
+            <label class="col-sm-2 col-form-label">Company Name</label>
+            <div class="col-sm-12">
+              <input [(ngModel)]="customer.companyName" type="text" class="form-control" placeholder="COMPANY NAME" [disabled]="!editMode">
+            </div>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="form-group col-md">
+            <label class="col-sm-2 col-form-label">Contact Name</label>
+            <div class="col-sm-12">
+              <input [(ngModel)]="customer.contactName" type="text" class="form-control" placeholder="CONTACT NAME" [disabled]="!editMode">
+            </div>
+          </div>
+
+          <div class="form-group col-md">
+            <label class="col-sm-2 col-form-label">Email Address</label>
+            <div class="col-sm-12">
+              <input [(ngModel)]="customer.emailAddress" type="text" class="form-control" placeholder="EMAIL ADDRESS" [disabled]="!editMode">
+            </div>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="form-group col-md">
+            <label class="col-sm-2 col-form-label">Shipping Method</label>
+            <div class="col-sm-12">
+              <input [(ngModel)]="customerAddress.shippingMethod" type="text" class="form-control" placeholder="SHIPPING METHOD" [disabled]="!editMode">
+            </div>
+          </div>
+
+          <div class="form-group col-md">
+            <label class="col-sm-2 col-form-label">Payment Terms</label>
+            <div class="col-sm-12">
+              <input [(ngModel)]="customer.paymentTerms" type="text" class="form-control" placeholder="PAYMENT TERMS" [disabled]="!editMode">
+            </div>
+          </div>
+      </div>
+
+        <div class="row">
+          <div class="form-group col-md">
+            <label class="col-sm-2 col-form-label">Address 1</label>
+            <div class="col-sm-12">
+              <input [(ngModel)]="customerAddress.address1" type="text" class="form-control" placeholder="ADDRESS 1" [disabled]="!editMode">
+            </div>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="form-group col-md">
+            <label class="col-sm-2 col-form-label">Address 2</label>
+            <div class="col-sm-12">
+              <input [(ngModel)]="customerAddress.address2" type="text" class="form-control" placeholder="ADDRESS 2" [disabled]="!editMode">
+            </div>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="form-group col-md">
+            <label class="col-sm-2 col-form-label">City</label>
+            <div class="col-sm-12">
+              <input [(ngModel)]="customerAddress.city" type="text" class="form-control" placeholder="CITY" [disabled]="!editMode">
+            </div>
+          </div>
+
+          <div class="form-group col-md">
+            <label class="col-sm-2 col-form-label">Region</label>
+            <div class="col-sm-12">
+              <input [(ngModel)]="customerAddress.region" type="text" class="form-control" placeholder="REGION" [disabled]="!editMode">
+            </div>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="form-group col-md">
+            <label class="col-sm-2 col-form-label">Postal Code</label>
+            <div class="col-sm-12">
+              <input [(ngModel)]="customerAddress.postalCode" type="text" class="form-control" placeholder="POSTAL CODE" [disabled]="!editMode">
+            </div>
+          </div>
+
+          <div class="form-group col-md">
+            <label class="col-sm-2 col-form-label">Country</label>
+            <div class="col-sm-12">
+              <input [(ngModel)]="customerAddress.country" type="text" class="form-control" placeholder="COUNTRY" [disabled]="!editMode">
+            </div>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="form-group col-md">
+            <label class="col-sm-2 col-form-label">Phone</label>
+            <div class="col-sm-12">
+              <input [(ngModel)]="customerAddress.phone" type="text" class="form-control" placeholder="PHONE" [disabled]="!editMode">
+            </div>
+          </div>
+
+          <div class="form-group col-md">
+            <label class="col-sm-2 col-form-label">Fax</label>
+            <div class="col-sm-12">
+              <input [(ngModel)]="customerAddress.fax" type="text" class="form-control" placeholder="FAX" [disabled]="!editMode">
+            </div>
+          </div>
+        </div>
+
+        <!-- </div> -->
+
+        <div class="row mt-2">
+          <div class="col">
+            <button class="btn-confirm" (click)="save();" [disabled]="!editMode">Save</button>
+          </div>
+          <div class="col">
+              <button class="btn-confirm" (click)="toggleEdit(true);" [disabled]="editMode || filteredCustomers.length == 0">Edit</button>
+          </div>
+          <div class="col">
+              <button class="btn-cancel" (click)="cancelChanges();" [disabled]="!editMode">Cancel</button>
+          </div>
+        </div>
+
+  </div>
+
+</div>

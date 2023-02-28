@@ -1,0 +1,286 @@
+<div id="main">
+  <div class="row" style="margin-top : 100px">
+    <div class="col-8">
+      <div class="row">
+        <div class="col">
+          <span style="color: white;">LAST UPDATE BY : {{lastUpdated.username}} &#47; DATE : {{formatDate(lastUpdated.date)}}</span>
+        </div>
+
+      </div>
+
+      <div class="row search-panel">
+        <div class="col-6">
+          <input [(ngModel)]="searchString" (keyup)="searchTimeout()" class="form-control search-text search-field"
+                 type="text" placeholder="SEARCH" [disabled]="editMode" />
+        </div>
+
+        <!--<div class="col-2">
+          <select [(ngModel)]="selectedProductType" (change)="searchPanelChange()" class="custom-select search-field" [disabled]="editMode">
+            <option *ngFor="let productType of productTypes" [value]="productType.value">{{productType.text}}</option>
+          </select>
+        </div>
+        <div class="col-2">
+          <select [(ngModel)]="selectedCustomer" (change)="searchPanelChange()" class="custom-select search-field" [disabled]="editMode">
+            <option [value]="0">All</option>
+            <option *ngFor="let customer of customers" [value]="customer.custIdno">{{customer.customerId}}</option>
+          </select>
+        </div>
+        <div class="col-2">
+          <select [(ngModel)]="selectedJewelryType" (change)="searchPanelChange()" class="custom-select search-field" [disabled]="editMode">
+            <option [value]="0">All</option>
+            <option *ngFor="let jewelryType of jewelryTypes" [value]="jewelryType.jewelryTypeId">{{jewelryType.type}}</option>
+          </select>
+        </div>-->
+
+        <div class="col-1" style="color: white; line-height: 50px;">
+          Items: {{totalNonPrecious}}
+        </div>
+      </div>
+
+
+      <div class="table-row row">
+        <div id="nonPreciousTable" #productTable class="table-container"
+             [ngClass]="{'table-collapsed': tableCollapsed}"
+             (clickOutside)="tableActive = false;" (click)="tableActive = true;">
+          <div class="overlay"></div>
+          <table class="table">
+            <thead style="height: 40px !important;">
+              <tr class="col">
+                <th scope="col" (click)="onSort('nonPreciousId')"><i class="fa" [ngClass]="sortClass('nonPreciousId')"></i> ID</th>
+                <th scope="col" (click)="onSort('name')"><i class="fa" [ngClass]="sortClass('name')"></i> NAME</th>
+                <th scope="col" (click)="onSort('sku')"><i class="fa" [ngClass]="sortClass('sku')"></i> SKU</th>
+                <th scope="col" (click)="onSort('supplierSku')"><i class="fa" [ngClass]="sortClass('supplierSku')"></i> SUPPLIER SKU</th>
+                <th scope="col" (click)="onSort('stockQty')"><i class="fa" [ngClass]="sortClass('stockQty')"></i> STOCK QTY</th>
+                <th scope="col" (click)="onSort('supplierPrice')"><i class="fa" [ngClass]="sortClass('supplierPrice')"></i> SUPPLIER PRICE</th>
+              </tr>
+            </thead>
+            <tbody *ngIf="tableCollapsed === false && !editMode">
+              <tr *ngFor="let item of nonPreciousList" class="row-data"
+                  [ngClass]="{'row-data-active': item.nonPreciousId === nonPrecious.nonPreciousId, 'color-band': applyColorBand(item)}"
+                  (click)="getNonPrecious(item)">
+                <td scope="row">{{ item.nonPreciousId }}</td>
+                <td class="sku" scope="row">{{ item.name }}</td>
+                <td scope="row">{{ item.sku }}</td>
+                <td class="sku" scope="row">{{ item.supplierSku }}</td>
+                <td scope="row">{{ item.stockQty }}</td>
+                <td scope="row">{{ item.supplierPrice }}</td>
+              </tr>
+            </tbody>
+            <tbody *ngIf="tableCollapsed === false && editMode">
+              <tr *ngFor="let item of nonPreciousList" class="row-data"
+                  [ngClass]="{'row-data-active': item.nonPreciousId === nonPrecious.nonPreciousId}">
+                <td scope="row">{{ item.nonPreciousId }}</td>
+                <td class="sku" scope="row">{{ item.name }}</td>
+                <td scope="row">{{ item.sku }}</td>
+                <td class="sku" scope="row">{{ item.supplierSku }}</td>
+                <td scope="row">{{ item.stockQty }}</td>
+                <td scope="row">{{ item.supplierPrice }}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="col">
+
+          <div class="form-row">
+            <div class="col">
+              <div class="card text-white bg-dark mb-3 border-light">
+                <div class="card-header border-light text-center">ITEM NAME &#47; SKU &#47; UOM &#47; STOCK QUANTITY</div>
+                <div class="card-body">
+
+                  <div class="row">
+
+                    <div class="form-group col-md-3">
+                      <div class="col-sm-12">
+                        <input type="text" class="riva-input form-control" [(ngModel)]="nonPrecious.name"
+                               placeholder="NAME" [disabled]="!editMode">
+                        <div class="tool-tip">
+                          <div class="arrow-down"></div>
+                          NAME
+                        </div>
+                      </div>
+                    </div>
+
+
+                    <div class="form-group col-md-3">
+                      <div class="col-sm-12">
+                        <input type="text" class="riva-input form-control" [(ngModel)]="nonPrecious.sku"
+                               placeholder="SKU" [disabled]="!editMode">
+                        <div class="tool-tip">
+                          <div class="arrow-down"></div>
+                          SKU
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="form-group col-md-3">
+                      <div class="col-sm-12">
+                        <select [(ngModel)]="this.nonPrecious.unitsOfMeasureId" class="riva-input custom-select"
+                                [(value)]="selectedUOM" [disabled]="!editMode">
+                          <option *ngFor="let unit of uom" [value]="unit.unitsOfMeasureId">{{unit.uom}}</option>
+                        </select>
+                        <div class="tool-tip">
+                          <div class="arrow-down"></div>
+                          UOM
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="form-group col-md-3">
+
+                      <div class="col-sm-12">
+                        <input type="number" class="riva-input form-control" [(ngModel)]="nonPrecious.stockQty"
+                               placeholder="STOCK QTY" [disabled]="!editMode">
+                        <div class="tool-tip">
+                          <div class="arrow-down"></div>
+                          STOCK QTY
+                        </div>
+                      </div>
+
+                    </div>
+
+                  </div>
+
+                </div>
+              </div>
+            </div>
+
+          </div>
+
+          <div class="form-row">
+
+
+            <div class="col">
+              <div class="card text-white bg-dark mb-3 border-light">
+                <div class="card-header border-light text-center">SUPPLIER NAME &#47; SKU &#47; PRICE </div>
+                <div class="card-body">
+
+                  <div class="row">
+
+                    <div class="form-group col-md-4">
+                      <div class="col-sm-12">
+                        <select [(ngModel)]="nonPrecious.suppliersId" class="riva-input custom-select"
+                                [(value)]="nonPrecious.suppliersId" [disabled]="!editMode">
+                          <option *ngFor="let sups of suppliers" [value]="sups.suppliersId">{{sups.supplierId}}</option>
+                        </select>
+
+                        <div class="tool-tip">
+                          <div class="arrow-down"></div>
+                          SUPPLIER CODE
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="form-group col-md-4">
+                      <div class="col-sm-12">
+                        <input type="text" class="riva-input form-control" [(ngModel)]="nonPrecious.supplierSku"
+                               placeholder="SUPPLIER SKU" [disabled]="!editMode">
+                        <div class="tool-tip">
+                          <div class="arrow-down"></div>
+                          SUPPLIER SKU
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="form-group col-md-4">
+                      <div class="col-sm-12">
+                        <input type="number" class="riva-input form-control" [(ngModel)]="nonPrecious.supplierPrice"
+                               placeholder="SUPPLIER PRICE" [disabled]="!editMode">
+                        <div class="tool-tip">
+                          <div class="arrow-down"></div>
+                          SUPPLIER PRICE
+                        </div>
+                      </div>
+                    </div>
+
+                    </div>
+                  </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="form-row">
+
+            <div class="col">
+
+
+              <div class="card text-white bg-dark mb-3 border-light">
+                <div class="card-header border-light text-center">COMMENTS</div>
+                <div class="card-body">
+
+                  <div class="row">
+
+                    <div class="form-group col-md">
+                      <div class="col-sm-12">
+
+                        <textarea id="descbox" [(ngModel)]="nonPrecious.commentBox" [disabled]="!editMode"></textarea>
+
+                        <div class="tool-tip">
+                          <div class="arrow-down"></div>
+                          COMMENT
+                        </div>
+                      </div>
+                    </div>
+
+                  </div>
+                </div>
+              </div>
+
+            </div>
+
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+
+    <div class="col-md-4 form-group-sm p-5">
+
+      <div class="form-row text-center">
+        <img src="{{this.nonPrecious.picPath}}" width="230" height="230" class="mx-auto d-block">
+      </div>
+
+      <div class="form-row">
+
+
+      </div>
+
+      <div *ngIf="editMode" class="form-group">
+        <div class="form-row">
+          <div class="col-2"></div>
+          <div class="col-md-8">
+            <input type="file" #uploadImage style="display:none;" (change)="uploadProductImage(uploadImage.files)">
+            <button class="btn-confirm" (click)="uploadImage.click()">UPLOAD</button>
+          </div>
+          <!--<div class="col-md-4">
+            <button class="btn-confirm make-primary" >MAKE PRIMARY</button>
+          </div>-->
+          <!--<div class="col-md-4">
+            <button class="btn-delete" >DELETE</button>
+          </div>-->
+        </div>
+      </div>
+
+      <div class="form-row mt-1">
+        <div class="col-md-6">
+          <button *ngIf="!editMode" class="btn-confirm" (click)="toggleEdit()" [disabled]="editMode">EDIT</button>
+          <button *ngIf="editMode" class="btn-confirm" (click)="toggleCancel()">CANCEL</button>
+        </div>
+        <div class="col-md-6">
+          <button class="btn-confirm" (click)="save()" [disabled]="!editMode">SAVE</button>
+        </div>
+      </div>
+
+      <div class="form-row mt-1">
+        <div class="col-md-12">
+          <button class="btn-confirm" (click)="newProduct()" [disabled]="editMode">+ New</button>
+        </div>
+      </div>
+
+    </div>
+
+  </div>

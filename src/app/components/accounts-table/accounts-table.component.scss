@@ -1,0 +1,67 @@
+@import '../products-table/products-table.component.scss';
+
+// Angular Material Tabs
+
+// div{
+// 	border: solid 1px white;
+// }
+h2{
+	width: 100%;
+}
+
+.restriction-table{
+	width: 60%;
+	min-width: 500px;
+}
+
+.permissions-table{
+	width: 15%;
+	min-width: 500px;
+
+	.row-data{
+		&:hover{
+			cursor: pointer;
+		}
+	}
+
+	.row-data-active{
+        background-color: $theme-color-contrast !important;
+		color: black;
+    }
+}
+
+.page-restriction-popup{
+	width: 60%;
+	min-width: 500px;
+	height: 600px;
+	overflow-y: auto;
+}
+
+.page-permission-body{
+	height: 530px;
+	overflow-y: auto;
+}
+
+.roletype-select{
+	width: 150px;
+}
+
+.btn-delete{
+	background-color: transparent;
+}
+
+.autosave-note{
+	color: white;
+}
+
+.page-disabled{
+	background-color: #595959;
+}
+
+.mat-tab-labels{
+	background-color: white !important;
+}
+
+.color-white{
+	color: white;
+}

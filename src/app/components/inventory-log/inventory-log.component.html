@@ -1,0 +1,151 @@
+<div class="form-container">
+    <h2>INVENTORY SCANNING</h2>
+    <div class="form-row">
+        <!-- <div class="col-md-10"> -->
+            <div class="form-input-container">
+                
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        <label class="col-sm-2 col-form-label">INVENTORY CODE</label>
+                        <div class="col-sm-12">
+                            <input [(ngModel)]="inventory.barcodeId" (blur)="getScannerData()" class="form-control" type="text" placeholder="SCAN HERE">
+                        </div>
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label class="col-sm-2 col-form-label">TYPE</label>
+                        <div class="col-sm-6">
+                            <input [(ngModel)]="inventory.itemType" class="form-control" type="text" placeholder="" disabled>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        <label class="col-sm-2 col-form-label">ITEM NO</label>
+                        <div class="col-sm-12">
+                            <input [(ngModel)]="inventory.itemNo" (blur)="getScannerDataItemNo()" class="form-control" type="text" placeholder="ITEM NO">
+                        </div>
+                    </div>
+                    <div class="form-group col-md-6"></div>
+                </div>
+        
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        <label class="col-sm-2 col-form-label">WKO</label>
+                    <div class="col-sm-12">
+                        <input [(ngModel)]="wkoID" (blur)="getScannerDataWKO()" class="form-control" type="text" placeholder="SCAN WKO">
+                    </div>
+                    </div>
+                    <div class="form-group col-md-6"></div>
+                </div>
+
+            </div>
+        <!-- </div> -->
+
+        <!-- <div class="vertical-divider"></div> -->
+
+        <!-- <div class="col-md-6"> -->
+            <div class="form-input-container">
+
+                <div class="form-group row">
+                    <label class="col-sm-2 col-form-label">KARAT</label>
+                    <div class="col-sm-4">
+                        <input [(ngModel)]="inventory.karat" class="form-control" type="text" placeholder="KARAT" disabled>
+                    </div>
+                </div>
+        
+                <div class="form-group row">
+                    <label class="col-sm-2 col-form-label">UOM</label>
+                    <div class="col-sm-4">
+                        <input [(ngModel)]="uom" class="form-control" type="text" placeholder="UOM" disabled>
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <label class="col-sm-2 col-form-label">GRAMS PER UNIT</label>
+                    <div class="col-sm-4">
+                        <input [(ngModel)]="gramsPerUnit" class="form-control" type="text" placeholder="GRAMS PER UNIT" disabled>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        <label class="col-sm-2 col-form-label">OLD INV QTY</label>
+                        <div class="col-sm-6">
+                            <input [(ngModel)]="inventory.qtyOld" class="form-control" type="text" placeholder="OLD" disabled>
+                        </div>
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label class="col-sm-2 col-form-label">OLD TOTAL</label>
+                        <div class="col-sm-6">
+                            <input [(ngModel)]="inventory.gramWgtOld" class="form-control" type="text" placeholder="OLD TOTAL" disabled>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        <label class="col-sm-2 col-form-label">NEW INV QTY</label>
+                        <div class="col-sm-6">
+                            <input [(ngModel)]="inventory.qtyNew" (blur)="updateNewTotal()" class="form-control" type="number" placeholder="NEW">
+                        </div>
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label class="col-sm-2 col-form-label">NEW TOTAL</label>
+                        <div class="col-sm-6">
+                            <input  [(ngModel)]="inventory.gramWgtNew"name="new-total" class="form-control" type="number" placeholder="NEW TOTAL" [disabled]="!newTotalEditable">
+                        </div>
+                        <mat-slide-toggle [(ngModel)]="newTotalEditable" class="toggle-edit" checked>ENABLE EDIT</mat-slide-toggle>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <button (click)="addInventoryLog()" class="btn-confirm">PROCESS INVENTORY SCAN</button>
+                </div>
+
+            </div>
+        <!-- </div> -->
+    </div>
+    
+    <!--  -->
+    <div class="table-container">
+        <table class="table">
+            <thead>
+              <tr class="col">
+                <th scope="col">ID</th>
+                <th scope="col">BARCODE ID</th>
+                <th scope="col">ITEM TYPE</th>
+                <th scope="col">ITEM NO</th>
+                <th scope="col">KARAT</th>
+                <th scope="col">ENTRY DATE</th>
+                <th scope="col">QTY OLD</th>
+                <th scope="col">QTY NEW</th>
+                <th scope="col">GRAM WGT OLD</th>
+                <th scope="col">GRAM WGT NEW</th>
+                <th scope="col">WEB USER</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr class="row-data" *ngFor="let log of inventoryLogs" (click)="setInventoryLog(log)">
+                <th scope="row">
+                  {{log.id}}
+                </th>
+                <td> {{log.barcodeId}} </td>
+                <td> {{log.itemType}} </td>
+                <td> {{log.itemNo}} </td>
+                <td> {{log.karat}} </td>
+                <td> {{log.entryDate}} </td>
+                <td> {{log.qtyOld}} </td>
+                <td> {{log.qtyNew}} </td>
+                <td> {{log.gramWgtOld}} </td>
+                <td> {{log.gramWgtNew}} </td>
+                <td> {{log.webUser}} </td>
+              </tr>
+    
+              <tr *ngIf="!inventoryLogs">No data found!</tr>
+            </tbody>
+        </table>
+    </div>
+
+</div>
+  

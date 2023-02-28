@@ -1,0 +1,348 @@
+<div id="divMain" *ngIf="!modalActive">
+    <button type="button" class="btn btn-confirm bg-success" (click)="modalOpen(createWorkOrder);"><i class="fa fa-plus"></i> CREATE WORK ORDER </button>
+    <button type="button" class="btn btn-confirm bg-primary" (click)="modalOpen(closeWorkOrders);"><i class="fa fa-check-square-o"></i> CLOSE WORK ORDERS </button> 
+    <div class="row work-order-list-container">
+        <div class="card text-white bg-dark border-light">
+            <div class="card-header border-light text-center"> 
+                <span>
+                    <select [(ngModel)]="select_wko" (change)="filterWKO();" style="width: 180px;">
+                        <option [value]="0">ALL</option>
+                        <option [value]="1">OPEN</option>
+                        <option [value]="2">CLOSED</option>
+                    </select> WORK ORDERS
+                </span>
+            </div>
+            <div class="card-body">
+                <div *ngFor="let item of filtered_workOrderReports;">
+                    <div class="row">
+                        <div class="col-6">
+                            <div class="row">
+                                <div class="col-4">
+                                    <mat-form-field appearance="fill" style="width : 100%">
+                                        <mat-label>CREATED</mat-label>
+                                        <input matInput [matDatepicker]="createdDate" [(ngModel)]="item.createdDate" disabled>
+                                        <mat-datepicker #createdDate></mat-datepicker>
+                                    </mat-form-field>
+                                </div>
+                                <div class="col-4">
+                                    <mat-form-field appearance="fill" style="width : 100%">
+                                        <mat-label><span *ngIf="item.closedDate != null; else notClosed">CLOSED</span></mat-label>
+                                        <ng-template #notClosed>OPEN</ng-template>
+                                        <input matInput [matDatepicker]="closedDate" [(ngModel)]="item.closedDate"disabled>
+                                        <mat-datepicker #closedDate></mat-datepicker>
+                                    </mat-form-field>
+                                </div>
+                                <div class="col-4">
+                                    <mat-form-field appearance="fill" style="width : 100%">
+                                        <mat-label>LOCATION</mat-label>
+                                        <input matInput [(ngModel)]="item.location" disabled>
+                                    </mat-form-field>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-6"></div>
+                    </div>
+                    <div class="row mb-3">
+                        <carousel arrowsTheme="dark" overflowCellsLimit="10" height="150" freeScroll="true">
+                            <div id="imgCarousel" class="carousel-cell" *ngFor="let detail of item.workOrderPrintReports">
+                                <img 
+                                (click)="selectPrintReport(detail);modalOpen(printReport);" 
+                                src="{{detail.itemPhoto}}" 
+                                title="{{detail.itemName}}"
+                                style="z-index: 0 !important;">
+                                <div class="tool-tip">
+                                  <div class="arrow-down"> </div>
+                                  {{detail.itemName}}
+                                </div>
+                            </div>
+                        </carousel>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<ng-template #printReport let-modal>
+    <div class="report-popup">
+        <div class="modal-header row">
+            <h5 class="modal-title col-10" id="modal-basic-title">Print Report</h5>
+        </div>
+        <div class="modal-body">
+            <button type="button" class="btn btn-confirm" [useExistingCss]="true" printSectionId="print-section" ngxPrint><i class="fa fa-print"></i> PRINT REPORT</button> 
+            <div id="print-section">
+                <div class="print-canvas">
+                    <br/>
+                    <div class="report-label">
+                        <div class="row">
+                            <div class="col">
+                                <div class="row">
+                                    <div class="col">
+                                        <h1> WKO {{ workOrderPrintReport.workOrderId | idPipe }} </h1>
+                                        <ngx-qrcode
+                                            [elementType]="elementType"
+                                            [errorCorrectionLevel]="correctionLevel"
+                                            [value]="return(workOrderPrintReport.workOrderId | idPipe)"
+                                            cssClass="bshadow"></ngx-qrcode>
+                                    </div>
+                                </div>
+                                <br/>
+                                <div class="row">
+                                    <div class="col">ITEM NAME: </div><div class="col font-weight-bold">{{workOrderPrintReport.itemName}}</div>
+                                    <div class="col"></div>
+                                </div>
+                                <div class="row">
+                                    <div class="col">PO INTERNAL: </div><div class="col font-weight-bold">{{order.pointernal}}</div>
+                                    <div class="col"></div>
+                                </div>
+                                <div class="row">
+                                    <div class="col">PO EXTERNAL: </div><div class="col font-weight-bold">{{order.poexternal}}</div>
+                                    <div class="col"></div>
+                                </div>
+                                <div class="row">
+                                    <div class="col">ENTRY DATE: </div><div class="col font-weight-bold">{{order.entryDate | date: 'mediumDate'}}</div>
+                                    <div class="col"></div>
+                                </div>
+                                <div class="row">
+                                    <div class="col">RECIEVED: </div><div class="col font-weight-bold">{{order.receivedDate | date: 'mediumDate'}}</div>
+                                    <div class="col"></div>
+                                </div>
+                                <div class="row">
+                                    <div class="col">REQUIRED: </div><div class="col font-weight-bold">{{order.requiredDate | date: 'mediumDate'}}</div>
+                                    <div class="col"></div>
+                                </div>
+                            </div>
+                            <div class="col">
+                                <div class="row">
+                                    <div class="col">
+                                        <div class="row">
+                                            <div class="col">SIZE: </div><div class="col font-weight-bold"><h4>{{workOrderPrintReport.size}}</h4></div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col">METAL: </div><div class="col font-weight-bold"><h4>{{workOrderPrintReport.metal}}</h4></div>
+                                        </div>
+                                    </div>
+                                    <div class="col">
+                                        <div class="workorder-img">
+                                            <img src="{{workOrderPrintReport.itemPhoto}}">
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                            </div>
+                        </div>
+                    </div>
+
+                    <br/>
+                    <div class="divider">
+                        <div class="divider-label">BILL OF MATERIALS</div>
+                    </div>
+                    <br/>
+
+                    <table class="report-table" *ngIf="bomList(workOrderPrintReport.bomjson).length > 0">
+                        <thead style="height: 40px !important;">
+                        <tr class="col-4">
+                            <th scope="col">Type</th>
+                            <th scope="col">Name</th>
+                            <th scope="col">Quantity</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr *ngFor="let item of bomList(workOrderPrintReport.bomjson)" class="row-data">
+                            <td scope="row" style="width: 150px;">{{ item.ItemType }}</td>
+                            <td scope="row">{{ item.Material }}</td>
+                            <td scope="row" style="width: 150px;">{{ item.BOM.QTY }}</td>
+                        </tr>
+                        </tbody>
+                    </table>
+
+                    <br/>
+                    <div class="divider">
+                        <div class="divider-label">ROUTING</div>
+                    </div>
+                    <br/>
+
+                    <table class="report-table" *ngIf="routingList(workOrderPrintReport.routingJSON).length > 0">
+                        <thead style="height: 40px !important;">
+                        <tr class="col-4">
+                            <th scope="col">Code</th>
+                            <th scope="col">Name</th>
+                            <th scope="col">Time (Seconds)</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr *ngFor="let item of routingList(workOrderPrintReport.routingJSON)" class="row-data">
+                            <td scope="row" style="width: 150px;">{{ item.ActivityCode }}</td>
+                            <td scope="row">{{ item.ActivityDesc }}</td>
+                            <td scope="row" style="width: 150px;">{{ item.R.StandardTime }}</td>
+                        </tr>
+                        </tbody>
+                    </table>
+
+                    <br/>
+
+                    <div class="print-footer">
+                        <img class="logo-icon" src="../../../assets/images/riva-logo.svg">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer row">
+            <button type="button" class="btn btn-confirm" aria-label="Close" (click)="modal.dismiss('Cross click')"><i class="fa fa-close"></i></button> 
+        </div>
+    </div>
+</ng-template>
+
+<ng-template #createWorkOrder let-modal>
+    <div class="report-popup">
+        <div class="modal-header row">
+            <h5 class="modal-title col-10" id="modal-basic-title">Create Work Order</h5>
+        </div>
+        <div class="modal-body">
+            <div class="create-form">
+                <div class="row wo-form">
+                    <div class="col-8 wo" style="padding: 0; padding-top: 15px;">
+                        <div class="row">
+                            <div class="col">
+                                <select [(ngModel)]="selectedOrderId" (change)="selectedOrderItem = 0;" class="custom-select form-control">
+                                    <option [value]="0" disabled>-- Orders --</option>
+                                    <option *ngFor="let item of orders" [value]="item.ordersId">{{item.pointernal}}</option>
+                                </select>
+                            </div>
+                            <div class="col">
+                                <select [(ngModel)]="selectedOrderItem" (change)="showOrderDetail();" class="custom-select form-control" [disabled]="selectedOrderId == 0">
+                                    <option [value]="0" disabled>-- Order Items --</option>
+                                    <option *ngFor="let item of orderItems" [value]="item.ordersDetailsId">{{item.products.productName}}</option>
+                                </select>
+                            </div>
+                            <div class="col"></div>
+                        </div>
+                        <br/>
+                        <div *ngIf="selectedOrderItem != 0" class="row">
+                            <div class="col">
+                                <img src="{{selectedOrderDetail.products.picPath}}"
+                                style="width: 250px; 
+                                height: auto;
+                                border: solid 1px white;">
+                            </div>
+                            <div class="col">
+                                <mat-form-field appearance="fill" style="width : 100%">
+                                    <mat-label>QUANTITY</mat-label>
+                                    <input matInput type="number" min="1" [(ngModel)]="workOrderDetailDisplay.workOrderDetail.qtyinit">
+                                </mat-form-field>
+                                <mat-form-field appearance="fill" style="width : 100%">
+                                    <mat-label>ORDER QUANTITY</mat-label>
+                                    <input matInput [(ngModel)]="selectedOrderDetail.qtyordered" disabled>
+                                </mat-form-field>
+                                <mat-form-field appearance="fill" style="width : 100%">
+                                    <mat-label>METAL TYPE: </mat-label>
+                                    <input matInput [value]="workOrderDetailDisplay.material" disabled>
+                                </mat-form-field>
+                                <mat-form-field appearance="fill" style="width : 100%">
+                                    <mat-label>SIZE: </mat-label>
+                                    <input matInput [value]="workOrderDetailDisplay.size" disabled>
+                                </mat-form-field>
+                            </div>
+                            <div class="col">
+                                <button type="button" class="btn btn-confirm button-container" (click)="addToWorkOrder();">Add to Work Order &nbsp;<i class="fa fa-arrow-right"></i></button> 
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col wo-details" style="padding: 0;">
+                        <div class="wo-details-item-container">
+                            <div *ngFor="let item of detailDisplays" class="row wo-detail-item border-bottom">
+                                <div class="col-2">
+                                    <img src="{{item.photo}}" style="width: 50px; height: auto;">
+                                </div>
+                                <div class="col" style="color: white;">
+                                    <div class="row">{{item.productName}}</div>
+                                    <div class="row">{{item.material}}</div>
+                                    <div class="row">Size {{item.size}}</div>
+                                </div>
+                                <div class="col-1" style="color: white;">
+                                    x&nbsp;{{item.workOrderDetail.qtyinit}}
+                                </div>
+                                <div class="col-1" style="color: white;">
+                                    <i (click)="removeDetail(item, item.workOrderDetail);" class="fa fa-trash"></i>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="row button-container">
+                            <button (click)="saveWorkOrder();" type="button" class="btn btn-confirm" [disabled]="detailDisplays.length == 0"><i class="fa fa-plus"></i> Create Work Order</button> 
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer row">
+            <button class="btn btn-confirm" (click)="modal.dismiss('Cross click');revertWorkOrder();">CANCEL</button> 
+        </div>
+    </div>
+</ng-template>
+
+<ng-template #closeWorkOrders let-modal>
+    <div class="report-popup">
+        <div class="modal-header row">
+            <h5 class="modal-title col-10" id="modal-basic-title">Close Work Orders</h5>
+        </div>
+        <div class="modal-body">
+            <div class="create-form">
+                <div class="row wo-form">
+                    <div class="col wo" style="padding: 0;">
+                        <mat-form-field appearance="fill" style="width : 100%">
+                            <mat-label>SEARCH WKO#</mat-label>
+                            <input matInput [(ngModel)]="searchText" (keyup)="filterOpenWKOs();" value={Number(searchText).toString()}>
+                        </mat-form-field>
+                        <!-- <input type="text" class="form-control search-text search-field" 
+                        placeholder="SEARCH WKO#" [(ngModel)]="searchString" (keyup)="filterOpenWKOs();"> -->
+                        <table class="table wko-table">
+                            <tr>
+                                <th>WKO</th>
+                                <th>Created</th>
+                                <th>Location</th>
+                            </tr>
+                            <tr class="row-data" *ngFor="let item of filtered_openWKOs" (click)="selectOpenWKO(item);">
+                                <td>{{item.workOrdersId | idPipe }}</td>
+                                <td>{{item.createdDate | date: 'mediumDate'}}</td>
+                                <td>{{item.location}}</td>
+                            </tr>
+                        </table>
+                    </div>
+                    <div class="col-8 wo-details" style="padding: 0;">
+                        <div class="wo-details-item-container">
+                            <table class="table" *ngIf="openWKO_details.length > 0">
+                                <tr>
+                                    <th></th>
+                                    <th>Name</th>
+                                    <th>M</th>
+                                    <th>S</th>
+                                    <th>Init</th>
+                                    <th>Closed</th>
+                                    <th></th>
+                                </tr>
+                                <tr *ngFor="let item of openWKO_details">
+                                    <td>
+                                        <img src="{{item.itemPhoto}}" style="width: 50px; height: auto;">
+                                    </td>
+                                    <td>{{item.itemName}}</td>
+                                    <td>{{item.metal}}</td>
+                                    <td>{{item.size}}</td>
+                                    <td>{{item.qtyinit}}</td>
+                                    <td>{{item.qtyclosed}}</td>
+                                    <td><i *ngIf="!(item.qtyinit == item.qtyclosed)" class="fa fa-times-circle" (click)="closeWkoDetail(item);"></i></td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="row button-container">
+                        <button (click)="closeWko(openWKO.workOrdersId);" type="button" class="btn btn-confirm" [disabled]="openWKO.workOrdersId == 0">Close Work Order</button> 
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer row">
+            <button class="btn btn-confirm" (click)="modal.dismiss('Cross click');resetOpenWKO();">CLOSE</button> 
+        </div>
+    </div>
+</ng-template>

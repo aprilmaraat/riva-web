@@ -1,0 +1,334 @@
+<div id="divMain">
+
+  <div class="row ml-5">
+    <div class="card text-white bg-dark mb-3 border-light">
+      <div class="card-header border-light text-center">SHIPPING AND ORDERS</div>
+      <div class="card-body">
+        <div class="row">
+
+          <div class="col-2">
+            <button type="button" class="btn btn-secondary" (click)="gotoOrdersView()">BACK TO VIEW ORDERS</button>
+          </div>
+          <div class="col-10">
+            <div class="row">
+              <div class="col-8">
+                <div class="row">
+                  <div class="col mt-3">
+
+                    <!--<h1 class="text-center text-white">{{selectedCustomer.companyName}}</h1>-->
+
+                    <div class="form-group">
+                      <div class="col-sm-12">
+
+                        <mat-form-field appearance="outline" style="font-size :30px; color : white; width : 300px;">
+                          <mat-label>CUSTOMER</mat-label>
+                          <select matNativeControl required [(ngModel)]="selectedOrder.customerId" [disabled]="!editMode">
+                            <option *ngFor="let customer of customersList" [value]="customer.custIdno">{{customer.companyName}}</option>
+                          </select>
+                        </mat-form-field>
+
+                      </div>
+                    </div>
+
+                  </div>
+                </div>
+              </div>
+              <div class="col-4">
+
+                <address>
+                  {{selectedCustomer.contactName}} <br>
+                  {{selectedCustomersAddresses.address1}} <br>
+                  {{selectedCustomersAddresses.address2}} <br>
+                  {{selectedCustomersAddresses.city}}, {{selectedCustomersAddresses.region}}, {{selectedCustomersAddresses.postalCode}}<br>
+                  {{selectedCustomer.emailAddress}}
+                </address>
+
+              </div>
+
+            </div>
+
+          </div>
+
+        </div>
+
+
+        <div class="row mt-3">
+          <div class="col">
+            <!-- START SECOND COL-->
+
+            <div class="row" id="buttonSection">
+
+              <div class="col">
+                <div class="row">
+                  <div class="col-8"></div>
+                  <div class="col-4">
+                    <div class="row">
+
+                      <div class="col">
+                        <div class="row">
+                          <div class="col">
+                            <button type="button" class="btn btn-success" [disabled]="editMode" (click)="editOrder()" *ngIf="hidebtns">
+                              <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
+                              Edit
+                            </button>
+                          </div>
+                          <!--<div class="col-2" hidden>
+                            <button type="button" class="btn btn-success" [disabled]="editMode" (click)="newOrder()">
+                              <i class="fa fa-file-o" aria-hidden="true"></i>
+                              New
+                            </button>
+                          </div>-->
+                          <div class="col">
+                            <button type="button" class="btn btn-success" [disabled]="!editMode" (click)="cancelChange()" *ngIf="hidebtns">
+                              <i class="fa fa-window-close" aria-hidden="true"></i>
+                              Cancel
+                            </button>
+                          </div>
+                          <div class="col">
+                            <button type="button" class="btn btn-success" [disabled]="!editMode" (click)="saveOrder()">
+                              <i class="fa fa-floppy-o" aria-hidden="true"></i>
+                              Save
+                            </button>
+                          </div>
+                          <!--<div class="col-2" hidden>
+                            <button type="button" class="btn btn-success" [disabled]="orderDetailFlag" id="btndetails"
+                                    (click)="openOrderDetails()">
+                              <i class="fa fa-list" aria-hidden="true"></i>
+                              Details
+                            </button>
+                          </div>-->
+
+                        </div>
+
+                      </div>
+
+                    </div>
+                  </div>
+
+
+                </div>
+
+              </div>
+
+            </div>
+
+            <div class="row" id="ordersBindingSection">
+              <div class=col>
+
+                <div class="row">
+                  <div class="col-6">
+
+                    <div class="row">
+                      <div class="col-3">
+                        <div class="form-group col-md">
+                          <div class="col-sm-12">
+
+                            <mat-form-field appearance="outline" style="width : 220px;">
+                              <mat-label>PO INTERNAL</mat-label>
+                              <input matInput [(ngModel)]="selectedOrder.pointernal" [disabled]="!editMode">
+                            </mat-form-field>
+
+                          </div>
+                        </div>
+                      </div>
+
+                      <div class="col-3">
+                        <div class="form-group col-md">
+                          <div class="col-sm-12">
+
+                            <mat-form-field appearance="outline" style="width : 220px;">
+                              <mat-label>PO EXTERNAL</mat-label>
+                              <input matInput [(ngModel)]="selectedOrder.poexternal" [disabled]="!editMode">
+                            </mat-form-field>
+
+                          </div>
+                        </div>
+                      </div>
+
+                      <div class="col-2">
+                        <div class="form-group col-md">
+                          <div class="col-sm-12">
+
+                            <mat-form-field appearance="outline" class="fieldsize">
+                              <mat-label>RECEIVED DATE</mat-label>
+                              <!-- #docregion toggle -->
+                              <input matInput [matDatepicker]="picker1" [(ngModel)]="selectedOrder.receivedDate" [disabled]="!editMode">
+                              <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
+                              <mat-datepicker #picker1></mat-datepicker>
+                              <!-- #enddocregion toggle -->
+                            </mat-form-field>
+
+                          </div>
+                        </div>
+                      </div>
+
+                      <div class="col-2">
+                        <div class="form-group col-md">
+                          <div class="col-sm-9">
+
+                            <mat-form-field appearance="outline" class="fieldsize">
+                              <mat-label>ENTRY DATE</mat-label>
+                              <!-- #docregion toggle -->
+                              <input matInput [matDatepicker]="picker2" [(ngModel)]="selectedOrder.entryDate" disabled>
+                              <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
+                              <mat-datepicker #picker2></mat-datepicker>
+                              <!-- #enddocregion toggle -->
+                            </mat-form-field>
+
+                          </div>
+                        </div>
+                      </div>
+
+                      <div class="col-2">
+                        <div class="form-group col-md">
+                          <div class="col-sm-12">
+
+                            <mat-form-field appearance="outline" class="fieldsize">
+                              <mat-label>REQUIRED DATE</mat-label>
+                              <!-- #docregion toggle -->
+                              <input matInput [matDatepicker]="picker3" [(ngModel)]="selectedOrder.requiredDate" [disabled]="!editMode">
+                              <mat-datepicker-toggle matSuffix [for]="picker3"></mat-datepicker-toggle>
+                              <mat-datepicker #picker3></mat-datepicker>
+                              <!-- #enddocregion toggle -->
+                            </mat-form-field>
+
+                          </div>
+                        </div>
+                      </div>
+
+                    </div>
+
+                  </div>
+                  <div class="col-6">
+                    <div class="row">
+
+
+                      <div class="col-2">
+                        <div class="form-group col-md">
+                          <div class="col-sm-12">
+                            <mat-form-field appearance="outline" class="fieldsize">
+                              <mat-label>TOTAL SHIPPED DATE</mat-label>
+                              <!-- #docregion toggle -->
+                              <input matInput [matDatepicker]="picker4" [(ngModel)]="selectedOrder.totalShippedDate" disabled>
+                              <mat-datepicker-toggle matSuffix [for]="picker4"></mat-datepicker-toggle>
+                              <mat-datepicker #picker4></mat-datepicker>
+                              <!-- #enddocregion toggle -->
+                            </mat-form-field>
+                          </div>
+                        </div>
+                      </div>
+
+                      <div class="col-2" hidden>
+                        <div class="form-group col-md">
+                          <div class="col-sm-12">
+
+                            <mat-form-field appearance="outline" class="fieldsize">
+                              <mat-label>ORDER STATUS</mat-label>
+                              <select matNativeControl required [(ngModel)]="selectedOrder.orderStatusId" [disabled]="!editMode">
+                                <option *ngFor="let stat of orderStatusList" [value]="stat.ordersStatusId">{{stat.status}}</option>
+                              </select>
+                            </mat-form-field>
+
+                          </div>
+                        </div>
+                      </div>
+
+                      <div class="col-10">
+                        <div class="form-group col-md">
+                          <div class="col-sm-12">
+
+                            <mat-form-field appearance="outline" style="width : 100%">
+                              <mat-label>COMMENTS</mat-label>
+                              <textarea matInput class="col-12" [(ngModel)]="selectedOrder.comment" [disabled]="!editMode" style="height : 21px"></textarea>
+                            </mat-form-field>
+
+                          </div>
+                        </div>
+                      </div>
+
+                    </div>
+
+                  </div>
+
+                </div>
+
+
+
+              </div>
+            </div>
+
+          </div> <!-- END SECOND COL-->
+        </div>
+      </div>
+
+      <div class="card text-white bg-dark mb-3 border-light" *ngIf="hidebtns">
+        <div class="card-header border-light text-center">ORDER DETAILS</div>
+        <div class="card-body">
+          <orderdetails-list [_ordersId]="this.selectedOrderId" [_customerId]="this.selectedOrder.customerId"></orderdetails-list>
+        </div>
+      </div>
+    </div>
+  </div>
+</div><!--maindiv-->
+
+<ng-template #productDetail let-modal>
+  <div class="report-popup">
+    <div class="modal-header row">
+      <h5 class="modal-title col-10" id="modal-basic-title">Edit - Product, Material and Sizes</h5>
+    </div>
+    <div class="modal-body">
+      <div class="create-form">
+        <div class="row">
+          <div class="col" style="padding: 0; padding-top: 15px;">
+
+            <div class="row">
+              <div class="col">
+
+                <mat-form-field appearance="fill" style="width : 100%;">
+                  <mat-label>PRODUCT</mat-label>
+                  <select matNativeControl required (change)="getProductInfoByProduct($event.target.value);" [(ngModel)]="dialogProductId">
+                    <option *ngFor="let item of productPerCustomer" [value]="item.productsId">
+                      {{item.productName}}
+                    </option>
+                  </select>
+                </mat-form-field>
+
+
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col">
+
+                <mat-form-field appearance="fill" style="width : 100%">
+                  <mat-label>MATERIAL AND SIZE</mat-label>
+                  <select matNativeControl required (change)="setSelectedDialogProductsInfo($event.target.value)" [(ngModel)]="dialogProductsInfoId" [disabled]="productsInfo.length == 0 || dialogProductId == null">
+                    <option *ngFor="let item of productsInfo" [value]="item.productsInfoId">
+                      {{getProductInfoDesc(item.materialCodeId, item.size)}}
+                    </option>
+                  </select>
+                </mat-form-field>
+
+              </div>
+            </div>
+
+            <div class="row">
+
+              <div class="col-6">
+                <button class="btn btn-confirm" (click)="saveDetailsFromDiaog();modal.dismiss('Cross click');" [disabled]="dialogProductsInfoId == 0">SAVE</button>
+              </div>
+              <div class="col-6">
+                <button class="btn btn-confirm" (click)="modal.dismiss('Cross click');">CANCEL</button>
+              </div>
+            </div>
+
+            <br />
+          </div>
+        </div>
+      </div>
+    </div>
+    <!--<div class="modal-footer row">
+      <button class="btn btn-confirm" (click)="modal.dismiss('Cross click');">CANCEL</button>
+    </div>-->
+  </div>
+</ng-template>

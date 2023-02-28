@@ -1,0 +1,388 @@
+/* You can add global styles to this file, and also import other style files */
+@import './assets/generic-styles/variable';
+@import "~bootstrap/scss/bootstrap";
+@import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css');
+
+body{
+	margin: 0;
+	overflow: auto;
+	font-family: 'Consolas';
+	background-color: $background-color-light;
+	background-repeat: no-repeat;
+	background-attachment: fixed;
+	background-size: cover;
+	height: 100%;
+	width: 100%;
+}
+
+.close{
+    &:hover{ cursor: pointer !important; }
+}
+
+.hidden{
+	display: none;
+}
+
+.center-position{
+	margin: auto;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+}
+
+.unselectable{
+	-webkit-touch-callout: none;
+	-webkit-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+	user-select: none;
+}
+
+.form-container{
+    @extend .center-position;
+    width: 90%;
+    min-width: 500px;
+	margin-top: $top-nav-height;
+	height: auto;
+
+	& > .table{
+		position: relative;
+	}
+}
+
+.content-panel{
+	height: calc(100% - 50px);
+}
+
+.form-group{
+	@extend .center-position;
+	position: relative;
+	width: 100%;
+	text-align: center;
+	margin-top: 25px;
+}
+
+button{
+	width: 100%;
+	height: 50px;
+	border: none;
+	padding: 15px 32px;
+	text-align: center;
+	text-decoration: none;
+	display: inline-block;
+	font-size: 16px;
+	text-transform: uppercase;
+	&:focus { text-decoration: none; outline: 0; }
+
+	&:hover{ 
+		background-color: $theme-color-contrast;
+		color: black;
+	}
+}
+
+.btn-confirm{
+	background-color: $theme-color;
+	color: white;
+
+	&:disabled{
+		background-color: #2e2e2e;
+
+		&:hover{ 
+			background-color: #2e2e2e;
+			color: white;
+		}
+	}
+}
+
+.btn-cancel{
+	color: black;
+
+	&:disabled{
+		color: white;
+		background-color: #2e2e2e;
+
+		&:hover{ 
+			background-color: #2e2e2e;
+			color: white;
+		}
+	}
+}
+
+.btn-confirm-contrast{
+	background-color: $theme-color-contrast;
+	color: black;
+
+	&:hover{ 
+		background-color: $theme-color;
+		color: white;
+	}
+
+	&:disabled{
+		background-color: #2e2e2e;
+		color: white;
+
+		&:hover{ 
+			background-color: #2e2e2e;
+			color: white;
+		}
+	}
+}
+
+.btn-new{
+	background-color: $theme-color;
+	color: white;
+	width: 120px;
+	border: 2px solid white;
+	font-size: 12px;
+	margin: auto;
+
+	&:hover{
+		border: 2px solid #ffffff00;
+	}
+}
+
+.btn-link{
+	text-decoration: none !important;
+	text-transform: uppercase;
+    font-size: 12px;
+    color: $input-color;
+
+	&:hover{
+		cursor: pointer;
+		color: $theme-color;
+		text-decoration: none;
+	}
+
+	&:visited{ text-decoration: none; }
+
+	&:focus { text-decoration: none; outline: 0; }
+}
+
+.left-link{ float: left; } 
+
+.right-link{ float: right; }
+
+.indicator-required{
+	color: red;
+}
+
+// Floating Label s3
+/* Making the label break the flow */
+.floating-label
+{
+    position: absolute;
+    top: 0;
+    left: 0;
+    user-select: none;
+	z-index: 1500;
+	text-transform: uppercase;
+}
+
+/* Hide the browser-specific focus styles */
+.floating-label-field
+{
+	color: $input-color;
+    border-width: 0;
+    z-index: 2000;
+}
+.floating-label-field:focus
+{
+    outline: 0;
+    box-shadow: 0;
+}
+
+/* Make the label and field look identical on every browser */
+.floating-label,
+.floating-label-field
+{
+    font: inherit;
+    line-height: 1;
+    display: block;
+	width: 100%;
+	position: relative;
+}
+
+.floating-label-field--s3
+{
+	padding: 24px;
+    transition: border-color .25s ease-in-out;
+	color: white;
+	border-bottom: 1px solid $input-color;
+    background-color: transparent;
+}
+
+.floating-label-field--s3 + .floating-label
+{
+    position: absolute;
+    top: .75em;
+    left: .75em;
+    display: inline-block;
+	width: auto;
+    margin: 0;
+    padding: .75em;
+    transition: transform .25s, opacity .25s, padding .25s ease-in-out;
+    transform-origin: 0 0;
+	color: $input-color;
+}
+.floating-label-field--s3:focus,
+.floating-label-field--s3:not(:placeholder-shown)
+{
+	border-bottom: 1px solid $theme-color;
+}
+.floating-label-field--s3:focus + .floating-label,
+.floating-label-field--s3:not(:placeholder-shown) + .floating-label
+{
+    z-index: 2500;
+    padding: .75em;
+    transform: translate(0, -2em) scale(.9);
+	color: $theme-color;
+}
+
+/* Common Styles */
+/* Identical inputs on all browsers */
+.floating-label-field--s3:not(textarea)
+{
+    max-height: 4em;
+}
+
+.floating-label-field--s3::placeholder
+{
+    color: transparent;
+}
+html, body { height: 100%; }
+body {
+  margin: 0;
+  font-family: monospace !important
+}
+html, body { height: 100%; }
+body {
+  margin: 0;
+  font-family: monospace !important
+}
+
+/*body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+html, body { height: 100%; }
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }*/
+
+// Floating Label s2
+.floating-label-field--s2
+{
+    padding: 1.5em; 
+
+    transition: border-color .25s ease-in-out;
+
+    color: white;
+    border: 1px solid rgba(255, 255, 255, .1);
+    border-radius: 5px;
+    background-color: $background-color-light;
+}
+.floating-label-field--s2 + .floating-label
+{
+    position: absolute;
+    top: .75em;
+    left: .75em;
+
+    display: inline-block;
+
+    width: auto;
+    margin: 0;
+    padding: .75em;
+
+    transition: transform .25s, opacity .25s, padding .25s ease-in-out;
+    transform-origin: 0 0;
+
+    color: white;
+}
+.floating-label-field--s2:focus,
+.floating-label-field--s2:not(:placeholder-shown)
+{
+    border-color: rgba(255, 255, 255, .1);
+}
+.floating-label-field--s2:focus + .floating-label,
+.floating-label-field--s2:not(:placeholder-shown) + .floating-label
+{
+    z-index: 2500;
+
+    padding: .75em;
+
+    transform: translate(0, -2em) scale(.9);
+
+    color: white;
+    background-color: $background-color-light;
+}
+
+/* Common Styles */
+/* Identical inputs on all browsers */
+.floating-label-field--s2:not(textarea)
+{
+    max-height: 4em;
+}
+
+.floating-label-field--s2::placeholder
+{
+    color: transparent;
+}
+
+h2 {
+	color: white;
+}
+
+input{
+	background-color: transparent;
+	border: none;
+	color: white;
+}
+
+.btn-delete{
+	color: white;
+}
+
+.table{
+	color: white;
+}
+
+.col{
+	background-color: white;
+	color: black;
+}
+
+.table-container{
+	overflow: auto;
+
+	.col{
+        th{
+            background: white;
+            position: sticky;
+            top: 0;
+        }
+    }
+}
+
+.row-data{
+	height: 25px !important;
+	&:hover{
+		background-color: $theme-color-contrast !important;
+		color: black;
+
+		input{
+			color: black;
+		}
+	}
+}
+
+.font-size-10{
+	font-size: 10px;
+}
+
+.font-size-12{
+	font-size: 12px;
+}
+
+html, body { height: 100%; }
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+
+.main{
+	// height: calc(100% - 50px);
+    margin-top: 50px;
+}

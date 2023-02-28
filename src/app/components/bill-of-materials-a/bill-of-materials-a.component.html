@@ -1,0 +1,84 @@
+<h2 class="mt-3">BOM Table A
+    <span *ngIf="autosaveCounter > 0 && showAutosaveCounter" class="autosave-note">
+        Saving... <span class="fa fa-refresh fa-spin"></span>
+    </span>
+    <span *ngIf="autosaveCounter == 0 && showAutosaveCounter" class="autosave-note">
+        Saved <span class="fa fa-check"></span>
+    </span>
+</h2>
+<table class="table bom-table">
+    <thead>
+        <th scope="col">QTY</th>
+        <th scope="col">SKU</th>
+        <th scope="col">Name</th>
+        <th scope="col">Notes</th>
+        <th scope="col">Locked Size</th>
+        <th scope="col"></th>
+    </thead>
+    <tbody>
+        <tr *ngFor="let a of tableA" class="row-data" [ngClass]="rowColor(a.itemType)">
+            <td scope="row">
+                <span *ngIf="!editMode">{{a.bomQty}}</span>
+                <input *ngIf="editMode" [(ngModel)]="a.bomQty" type="number" style="border: solid 1px black; color: black; width: 50px;" (change)="updateTableAItem(a);">
+            </td>
+            <td scope="row">{{ a.sku }}</td>
+            <td scope="row">{{ a.itemName }}</td>
+            <td scope="row">
+                <span *ngIf="!editMode">{{ a.itemDescription }}</span>
+                <textarea *ngIf="editMode" [(ngModel)]="a.itemDescription" (change)="updateTableAItem(a);"></textarea>
+            </td>
+            <td scope="row">
+                <span *ngIf="!editMode">{{ a.isSizeDependent }}</span>
+                <mat-form-field *ngIf="editMode" appearance="outline">
+                    <mat-select [(ngModel)]="a.productsInfoId">
+                      <mat-option (click)="updateTableAItem(a);" [value]="0">-- None --</mat-option>
+                      <mat-optgroup *ngFor="let x of distinctMaterials" [label]="getMaterial(x.materialCodeId)"
+                                    [disabled]="false">
+                        <mat-option *ngFor="let info of getMaterialSizes(x.materialCodeId)" [value]="info.productsInfoId" (click)="updateTableAItem(a);">
+                          {{info.size}}
+                        </mat-option>
+                      </mat-optgroup>
+                    </mat-select>
+                </mat-form-field>
+            </td>
+            <td scope="row">
+                <span *ngIf="editMode" class="fa fa-times" (click)="delete(a.bomId)"></span>
+            </td>
+        </tr>
+    </tbody>
+</table>
+<!-- <div *ngIf="editMode" class="add-item-container">
+    <div *ngFor="let item of newTableAItem" class="row border-top add-item" [ngClass]="rowColor(item.type)">
+        <div class="col">{{item.sku}} ({{item.name}})</div>
+        <div class="col">
+            <select class="custom-select form-control" (change)="addToTableA(item.id, item.type, 1);">
+                <option disabled>- Select -</option>
+                <option *ngFor="let method of fabMethods" [value]="method.id">{{method.fabMethod}}</option>
+            </select>
+        </div>
+    </div>
+</div> -->
+<div class="mt-2" *ngIf="editMode">
+    <div class="row">
+        <div class="col">
+            <div (clickOutside)="showDropdown(false)">
+                <input 
+                id="search-option" 
+                class="" 
+                type="text" 
+                [(ngModel)]="keyword"
+                (focus)="showDropdown(true)">
+                <div class="options-container hidden">
+                    <div *ngFor = "let item of tableAOptions | filter:keyword">
+                        <div 
+                        *ngIf="!checkIfListed(item.id, item.type)"
+                        class="options-item" 
+                        (click)="addToTableA(item.id, item.type, 1);">
+                            <span>{{item.sku}} ({{item.name}})</span>
+                        </div>
+                    </div>
+                </div>
+            </div> 
+        </div>
+    </div>
+</div>

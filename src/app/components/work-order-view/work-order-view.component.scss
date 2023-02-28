@@ -1,0 +1,248 @@
+@import '../orderview/orderview.component.scss';
+
+#divMain{
+    .row, .col{
+        padding: 0;
+        margin: 0;
+    }
+    
+    .card{
+        @extend .center-position;
+    }
+    
+    .carousel-cell{
+        img{
+            &:hover{
+                cursor: pointer;
+            }
+        }
+    }
+}
+
+.report-popup{
+    @extend .center-position;
+    position: fixed;
+    height: 800px; 
+    width: 1440px; 
+    background-color: #1D1D1D;
+    border: solid 1px #EED253;
+    color: white;
+
+    .modal-header{
+        button{
+            height: 100%;
+        }
+    }
+
+    .row{
+        margin-left: 0;
+        margin-right: 0;
+    }
+    
+}
+
+#print-section{
+    @extend .center-position;
+    position: relative;
+    color: black;
+    background-color: #b5b5b5;
+    width: 1400px;
+    padding: 30px 100px;
+    height: 540px;
+    overflow-y: auto;
+
+    .row{
+        background-color: transparent;
+        margin: 0 !important;
+        padding: 0 !important;
+    }
+    .col{
+        background-color: transparent;
+        margin: 0 !important;
+        padding: 0 !important;
+    }
+}
+  
+.print-canvas{
+    padding: 30px;
+    background-color: white;
+    min-height: 1500px;
+  
+    @media print{
+      padding: 0;
+      color-adjust: exact;
+      -webkit-print-color-adjust: exact;
+    }
+}
+  
+.print-footer{
+    background-color: $background-color-light;
+    height: 50px;
+    width: 200px;
+    float: right;
+    padding: 10px;
+  
+    @media print{
+      background-color: $background-color-light;
+    }
+  
+    .logo-icon{
+      float: right;
+      height: 30px;
+      width: auto;
+      margin-right: 10px;
+    }
+}
+  
+h2{
+    text-align: center;
+    color: black;
+}
+  
+.btn-confirm{
+    width: auto;
+    margin: 15px;
+}
+  
+.report-table{
+    @extend .center-position;
+    width: 100%;
+    border: solid 1px black;
+    th{
+        border: solid 1px black;
+        text-align: center;
+        background-color: $background-color-light;
+        color: white;
+    }
+    tr{
+        border: solid 1px black;
+    
+        &:hover{
+            color: black !important;
+            background-color: transparent !important;
+        }
+    
+        td{
+            border: solid 1px black;
+            text-align: center;
+            padding: 0;
+        }
+    }
+  }
+ 
+.workorder-img{
+    position: relative;
+    width: 250px;
+    min-height: 250px;
+    float: right;
+    border: solid 3px black;
+    margin-left: 5px;
+  
+    img{
+      width: 100%;
+      height: auto;
+    }
+}
+  
+.divider{
+    position: relative;
+    width: 100%;
+    height: 6px;
+    background-color: $background-color-light;
+  
+    .divider-label{
+      @extend .center-position;
+      position: absolute;
+      width: 200px;
+      height: 20px;
+      background-color: white;
+      text-align: center;
+    }
+}
+
+.carousel-container{
+    z-index: 1 !important;
+}
+  
+.card-header{
+    font-size: 42px;
+}
+
+.create-form{
+    @extend .center-position;
+    position: relative;
+    // color: black;
+    // background-color: #b5b5b5;
+    width: 1400px;
+    // padding: 30px 100px;
+    height: 620px;
+    overflow-y: auto;
+}
+
+.wo-form{
+    height: 100%;
+}
+
+.wo, .wo-details{
+    border: solid 1px white;
+}
+
+.wo-detail-item{
+    color: white;
+    padding-top: 14px;
+    padding-bottom: 14px;
+}
+
+.wo-details-item-container{
+    overflow-y: auto;
+    max-height: 530px;
+
+    & > .table {
+        & > tr {
+            & > td {
+                height: 50px;
+                line-height: 50px;
+            }
+        }
+    }
+}
+
+.modal-body{
+    .row{
+        padding-left: 0;
+        padding-right: 0;
+        & > div{
+            margin: 0;
+        }
+    }
+    .col{
+        margin: 0;
+        background-color: transparent;
+    }
+}
+
+.button-container{
+    position: absolute;
+    bottom: 0;
+    right: 0;
+}
+
+.fa-trash, .fa-times-circle{
+    &:hover{
+        cursor: pointer;
+    }
+}
+
+.wko-table{
+    .row-data{
+        &:hover{
+            background-color: $theme-color-contrast;
+            color: black;
+            cursor: pointer;
+        }
+    }
+}
+
+.work-order-list-container{
+    min-width: 1200px;
+}

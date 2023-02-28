@@ -1,0 +1,156 @@
+<div class="row main-row" style="margin-top: 70px;">
+  <div class="col">
+    <mat-tab-group animationDuration="0ms" [(selectedIndex)]="tabIndex">
+      <mat-tab label="Accounts">
+        <div class="form-container">
+          <h2>ACCOUNTS</h2>
+          <table class="table">
+              <thead>
+                <tr class="col">
+                  <th scope="col">ID</th>
+                  <th scope="col">USERNAME</th>
+                  <th scope="col">PASSWORD</th>
+                  <th scope="col">FIRST NAME</th>
+                  <th scope="col">LAST NAME</th>
+                  <th scope="col">EMPLOYEE ID</th>
+                  <th scope="col">DATE CREATED</th>
+                  <th scope="col">LAST LOGIN DATE</th>
+                  <th></th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr class="row-data" *ngFor="let login of logins">
+                  <th scope="row">
+                    {{ login.loginId }}
+                  </th>
+                  <td>
+                    <span *ngIf="!isAuthorized">{{login.userName}}</span>
+                    <input *ngIf="isAuthorized" [(ngModel)]="login.userName" (blur)="updateUsername(login)" type="text" placeholder="username"/>
+                  </td>
+                  <td>
+                    <span *ngIf="!isAuthorized">*********************</span>
+
+                    <input *ngIf="isAuthorized" 
+                    [(ngModel)]="login.password"
+                    (focus)="storeOldPassword(login);login.password='';" 
+                    (blur)="login.password=updateLoginPassword(login);" 
+                    type="password" 
+                    placeholder="password"/>
+
+                  </td>
+                  <td>
+                    <span *ngIf="!isAuthorized">{{login.firstName}}</span>
+                    <input *ngIf="isAuthorized" [(ngModel)]="login.firstName" (blur)="updateFirstName(login)" type="text" placeholder="first name"/>
+                  </td>
+                  <td>
+                    <span *ngIf="!isAuthorized">{{login.lastName}}</span>
+                    <input *ngIf="isAuthorized" [(ngModel)]="login.lastName" (blur)="updateLastName(login)" type="text" placeholder="last name"/>
+                  </td>
+                  <td>
+                    <span *ngIf="!isAuthorized">{{login.employeeId}}</span>
+                    <input *ngIf="isAuthorized" [(ngModel)]="login.employeeId" (blur)="updateEmployeeID(login)" type="text" placeholder="employee id"/>
+                  </td>
+                  <td>{{ login.dateCreated | date:'long' }}</td>
+                  <td>{{ login.lastLogin | date:'long' }}</td>
+                  <td class="btn-link btn-delete" (click)="deleteLogin(login.loginId)">DELETE</td>
+                </tr>
+      
+                <tr *ngIf="!logins">No data found!</tr>
+              </tbody>
+          </table>
+          <button class="btn-new" (click)="modalOpen(accountCreate)">+ New</button>
+        </div>
+
+        <ng-template #accountCreate let-modal>
+          <div class="product-detail-popup">
+            <div class="modal-header row">
+              <h5 class="modal-title col-10" id="modal-basic-title">Create Account</h5>
+              <button type="button" class="close col-2" aria-label="Close" (click)="modal.dismiss('Cross click')">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+              <div class="form-group">
+                <div class="input-group">
+                  <label>Username</label>
+                  <input [(ngModel)]="newLogin.userName" type="text" class="riva-input form-control" placeholder="">
+                </div>
+              </div>
+              <div class="form-group">
+                <div class="input-group">
+                  <label>Password</label>
+                  <input [(ngModel)]="newLogin.password" type="password" class="riva-input form-control" placeholder="">
+                </div>
+              </div>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-confirm" (click)="save(newLogin);modal.close('Save click');" [disabled]="isNewLoginEmpty">Save</button>
+            </div>
+          </div>
+        </ng-template>
+
+      </mat-tab>
+      <mat-tab label="Permissions">
+
+        <div class="row">
+          <div class="form-container permissions-table col-2 br">
+            <h2>Accounts</h2>
+            <table class="table">
+                <thead>
+                  <tr class="col">
+                    <th scope="col">ID</th>
+                    <th scope="col">USERNAME</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr class="row-data" *ngFor="let login of logins" [ngClass]="{'row-data-active': login.loginId == selectedLogin.loginId}" (click)="selectLogin(login);">
+                    <th scope="row">
+                      {{ login.loginId }}
+                    </th>
+                    <td>{{ login.userName }}</td>
+                  </tr>
+                </tbody>
+            </table>
+          </div>
+
+          <div class="col">
+            <h2>Page Permissions: {{role.roleTypeNavigation.name}}
+              <select [(ngModel)]="role.roleType" class="custom-select form-control roletype-select">
+                  <option *ngFor="let type of roleTypes" [value]="type.id">{{type.name}}</option>
+              </select>
+            </h2>
+            <div>
+              <button class="btn-new" (click)="updateRole();">Save</button>
+              <table *ngIf="role.roleType == 2" class="table restriction-table">
+                <thead>
+                  <tr class="col">
+                    <th scope="col">Page</th>
+                    <th scope="col">Permission</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let item of restrictions" class="row-data" [ngClass]="{'page-disabled': item.Permission == 'Disabled'}">
+                    <td>{{ item.Page }}</td>
+                    <td>
+                      <form *ngIf="isAuthorized">
+                        <input type="radio" [(ngModel)]="item.Permission" [ngModelOptions]="{standalone: true}" value="Disabled" >Disabled
+                        &nbsp;
+                        <input type="radio" [(ngModel)]="item.Permission" [ngModelOptions]="{standalone: true}" value="Read">Read
+                        &nbsp;
+                        <input type="radio" [(ngModel)]="item.Permission" [ngModelOptions]="{standalone: true}" value="Write">Write
+                      </form>
+                      <span *ngIf="!isAuthorized">{{item.Permission}}</span>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+
+            </div>
+            
+          </div>
+        </div>
+
+      </mat-tab>
+    </mat-tab-group>
+  </div>
+</div>

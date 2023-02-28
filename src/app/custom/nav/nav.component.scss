@@ -1,0 +1,164 @@
+@import '../../../styles.scss';
+
+.nav-container {
+  width: 100%;
+  height: $top-nav-height;
+  min-width: 400px;
+  position: absolute;
+  background-color: $theme-color;
+  z-index: 99999;
+  top: 0;
+  line-height: $top-nav-height;
+  vertical-align: middle;
+
+  .nav-menu {
+    height: 100%;
+    margin-left: 250px;
+
+
+
+    .dropdown {
+      float: left;
+      line-height: 50px;
+      text-align: center;
+      font-size: 16px;
+      color: white;
+    }
+
+    .dropdown .dropbtn {
+      font-size: 16px;
+      border: none;
+      outline: none;
+      color: white;
+      background-color: inherit;
+      font-family: inherit;
+      margin: 0;
+      padding: 0 0 0 0 !important;
+    }
+
+    .dropdown-content {
+      display: none;
+      position: absolute;
+      background-color: #00ffff;
+      width: inherit;
+      box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+      z-index: 9998;
+
+      & > .submenu{
+        text-align: left;
+        padding-left: 10px;
+      }
+    }
+
+    .dropdown-content a .submenu {
+      float: left;
+      color: black;
+      padding: 12px 16px;
+      text-decoration: none;
+      display: block;
+      text-align: left;
+    }
+
+    .dropdown-content .submenu:hover {
+      background-color: #212529;
+      color: white;
+    }
+
+    .dropdown:hover .dropdown-content {
+      display: block;
+      background-color: lightgray;
+    }
+    /*   .dropbtn:hover {
+      background-color: #00ffff !important;
+      color: black!important;
+    }*/
+    & > div {
+      width: 180px;
+      line-height: 50px;
+      text-align: center;
+      font-size: 16px;
+      color: white;
+      float: left;
+
+      &:hover {
+        background-color: $theme-color-contrast;
+        color: black;
+        cursor: pointer;
+      }
+    }
+  }
+
+  &:focus {
+    outline: 0;
+  }
+}
+
+/*.sidenav-container{
+  position: absolute;
+  height: calc(100% - 50px);
+  width: 100%;
+  margin-top: $top-nav-height;
+  background-color: inherit;
+
+  & > .sidenav{
+    width: 250px;
+    z-index: 9500;
+    overflow-y: visible;
+    background-color: $background-color-light;
+    background-color: black;
+
+    button{
+      text-align: left;
+    }
+  }
+}*/
+
+.arrow-bar-open{
+  @extend .center-position;
+  position: absolute;
+  width: 50px;
+  height: 50px;
+  margin-top: 0;
+  margin-left: 250px;
+  background-color: white;
+  text-align: center;
+  line-height: 50px;
+
+  &:hover{
+    cursor: pointer;
+  }
+}
+
+.arrow-bar-close{
+  @extend .arrow-bar-open;
+  position: fixed;
+  margin-top: 50px;
+  margin-left: 0;
+}
+
+.logo-icon{
+    @extend .center-position;
+    position: absolute;
+    width: 180px;
+    height: auto;
+    margin-left: 10px;
+
+    &:hover{
+        cursor: pointer;
+    }
+}
+
+.account-panel {
+  float: right;
+  margin-top: -50px;
+
+  & > span {
+    color: white;
+    text-transform: none;
+    margin-right: 10px;
+
+    &:hover {
+      color: $theme-color-contrast;
+    }
+  }
+}

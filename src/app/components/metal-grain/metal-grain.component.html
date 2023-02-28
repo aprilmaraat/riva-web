@@ -1,0 +1,151 @@
+<div class="main">
+    <div class="row">
+        <div class="col">
+
+            <div class="row search-panel">
+                <div class="col">
+                    <input [(ngModel)]="searchString" (keyup)="searchTimeout()" class="form-control search-text search-field" type="text" placeholder="SEARCH"/>
+                </div>
+                <div class="col"></div>
+                <div class="col"></div>
+                <div class="col-2" style="color: white; line-height: 50px;">
+                    Items: {{filteredMetalGrains.length}}
+                </div>
+            </div>
+        
+            <div class="table-row row">
+                <div class="table-container col">
+                    <table class="table">
+                        <thead style="height: 40px !important;">
+                            <tr class="col">
+                                <th scope="col">ID</th>
+                                <th scope="col">Name</th>
+                                <th scope="col">SKU</th>
+                                <th scope="col">Supplier</th>
+                                <th scope="col">Supplier SKU</th>
+                                <th scope="col">Material Code</th>
+                                <th scope="col">Unit of Measure</th>
+                                <th scope="col">QTY in Stock</th>
+                                <th scope="col">QTY in Scrap</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr 
+                            *ngFor="let item of filteredMetalGrains" 
+                            class="row-data" 
+                            [ngClass]="{'row-data-active': item.metalGrainsId === metalGrain.metalGrainsId, 'color-band': applyColorBand(item)}"
+                            (click)="selectItem(item);">
+                                <td scope="row">{{item.metalGrainsId}}</td>
+                                <td scope="row">{{item.name}}</td>
+                                <td scope="row">{{item.sku}}</td>
+                                <td scope="row">{{ supplierName(item.suppliersId) }}</td>
+                                <td scope="row">{{item.supplierSku}}</td>
+                                <td scope="row">{{ getMaterial(item.materialCode) }}</td>
+                                <td scope="row">{{ getUom(item.uom) }}</td>
+                                <td scope="row">{{item.qtyinStock}}</td>
+                                <td scope="row">{{item.qtyinScrap}}</td>
+                            </tr>
+                        </tbody>
+                    </table>  
+                </div>
+            </div>
+
+            <div class="row mt-2">
+              <div class="col">
+                <button class="btn-confirm" (click)="new();" [disabled]="editMode || newMode">New <span class="fa fa-plus"></span></button>
+              </div>
+            </div>
+
+        </div>
+
+        <div class="col-4">
+          
+            <div class="form-row" style="padding-top: 50px;">
+              <div class="form-group col-md">
+                <div class="form-group product-image-container">
+                  <img src="{{metalGrain.picPath}}">
+                  <input type="file" #uploadImage (change)="uploadTemp(uploadImage.files)" style="display:none;">
+                  <button *ngIf="newMode || editMode" class="btn-confirm btn-upload-photo" (click)="uploadImage.click()">UPLOAD</button>
+                </div>
+              </div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group col-md">
+                  <label class="col-sm-2 col-form-label">Name</label>
+                  <div class="col-sm-12">
+                    <input [(ngModel)]="metalGrain.name" type="text" class="form-control" placeholder="NAME" [disabled]="!editMode && !newMode">
+                  </div>
+                </div>
+                <div class="form-group col-md">
+                  <label class="col-sm-2 col-form-label">Sku</label>
+                  <div class="col-sm-12">
+                    <input [(ngModel)]="metalGrain.sku" type="text" class="form-control" placeholder="SKU" [disabled]="!editMode && !newMode">
+                  </div>
+                </div>
+                <div class="form-group col-md form-check">
+                    <label class="col-sm-2 col-form-label">Supplier</label>
+                    <div class="col-sm-12">
+                        <select [(ngModel)]="metalGrain.suppliersId" class="custom-select form-control" [disabled]="!editMode && !newMode">
+                          <option *ngFor="let supplier of suppliers" [value]="supplier.suppliersId">({{supplier.supplierId}}) {{supplier.companyName}}</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group col-md">
+                  <label class="col-sm-2 col-form-label">Supplier Sku</label>
+                  <div class="col-sm-12">
+                    <input [(ngModel)]="metalGrain.supplierSku" type="text" class="form-control" placeholder="SUPPLIER SKU" [disabled]="!editMode && !newMode">
+                  </div>
+                </div>
+                <div class="form-group col-md">
+                  <label class="col-sm-2 col-form-label">Comment</label>
+                  <div class="col-sm-12">
+                    <input [(ngModel)]="metalGrain.commentBox" type="text" class="form-control" placeholder="COMMENT BOX" [disabled]="!editMode && !newMode">
+                  </div>
+                </div>
+                <div class="form-group col-md form-check">
+                  <label class="col-sm-2 col-form-label">Material</label>
+                    <div class="col-sm-12">
+                      <select [(ngModel)]="metalGrain.materialCode" class="custom-select form-control" [disabled]="!editMode && !newMode">
+                        <option *ngFor="let material of materialCodes" [value]="material.materialCodeId">{{material.code}}</option>
+                      </select>
+                    </div>
+                </div>
+                <div class="form-group col-md form-check">
+                  <label class="col-sm-2 col-form-label">Unit of Measure</label>
+                    <div class="col-sm-12">
+                      <select [(ngModel)]="metalGrain.uom" class="custom-select form-control" [disabled]="!editMode && !newMode">
+                        <option *ngFor="let unit of unitOfMeasures" [value]="unit.unitsOfMeasureId">{{unit.uom}}</option>
+                      </select>
+                    </div>
+                </div>
+                <div class="form-group col-md">
+                  <label class="col-sm-2 col-form-label">QTY in Stock</label>
+                  <div class="col-sm-12">
+                      <input [(ngModel)]="metalGrain.qtyinStock" type="number" class="form-control" placeholder="Stock" [disabled]="!editMode && !newMode">
+                  </div>
+                </div>
+                <div class="form-group col-md">
+                    <label class="col-sm-2 col-form-label">QTY in Scrap</label>
+                    <div class="col-sm-12">
+                        <input [(ngModel)]="metalGrain.qtyinScrap" type="number" class="form-control" placeholder="Scrap" [disabled]="!editMode && !newMode">
+                    </div>
+                  </div>
+              </div>
+
+              <div class="row mt-2">
+                <div class="col">
+                  <button class="btn-confirm" (click)="save();" [disabled]="!editMode && !newMode">Save</button>
+                </div>
+                <div class="col">
+                    <button class="btn-confirm" (click)="toggleEdit(true);" [disabled]="editMode || filteredMetalGrains.length == 0 || newMode">Edit</button>
+                </div>
+                <div class="col">
+                    <button class="btn-cancel" (click)="cancelChanges();" [disabled]="!editMode && !newMode">Cancel</button>
+                </div>
+              </div>
+
+        </div>
+    </div>
+    
+</div>
